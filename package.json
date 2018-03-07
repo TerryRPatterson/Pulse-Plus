@@ -1,0 +1,22 @@
+{
+  "name": "didacticbasson",
+  "version": "0.0.0",
+  "description": "A dashboard for managing git projects across platforms.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TerryRPatterson/didactic-bassoon.git"
+  },
+  "author": "Chris, Nick, and Terry",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/TerryRPatterson/didactic-bassoon/issues"
+  },
+  "homepage": "https://github.com/TerryRPatterson/didactic-bassoon#readme",
+  "devDependencies": {
+    "eslint": "^4.18.2"
+  }
+}
