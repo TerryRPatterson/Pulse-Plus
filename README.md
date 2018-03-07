@@ -7,11 +7,10 @@
 
 ## Libraries
 * [D3.js](https://d3js.org/)
-* [Sass](sass-lang.com)
+* [Sass](https://sass-lang.com)
 
 ## General Style 
 * [Material Design](https://material.io/guidelines/)
 * [ESLint](https://eslint.org/)
 
-## the Shazam of food
 
