@@ -1,6 +1,7 @@
 /* main.js */
 /* eslint no-console:0 */
 /* github functionality */
+"use strict";
 var URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
 
 /**
@@ -142,3 +143,37 @@ var listPullRequests = function() {
 };
 
 listPullRequests();
+
+let methods = {
+    Test:"auth.test",/*Requires only auth token*/
+    ListChannels:"channels.list",/*Requires only auth token*/
+    postMessage:"chat.postMessage",/*Requires target channel, authtoken, and as user*/
+    ListMessages:"conversations.list",/*Requries only authToken*/
+    ListPrivate:"groups.list"
+
+};
+let url = function url(method){
+    let url = "https://slack.com/api/";
+    return url+methods[method];
+};
+let slack = function slack(method, channel, asUser, text){
+    let payload = {};
+    if (channel){
+        payload["channel"] = channel;
+    }
+    if (asUser ===  true){
+        payload["as_user"] = true;
+    }
+    if (text){
+        payload["text"] = text;
+    }
+    payload["token"] = localStorage["token"];
+    $.ajax(url(method),{
+        method:"POST",
+        header:{
+            "content-type":"application/x-www-form-urlencoded"
+        },
+        data:$.param(payload)
+    });
+};
+slack("Test");

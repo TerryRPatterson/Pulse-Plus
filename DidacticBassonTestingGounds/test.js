@@ -11,8 +11,7 @@ let methods = {
 
 };
 let url = function url(method){
-    let url = "https://my-little-cors-proxy.herokuapp.com/https://slack.com/api/";
-    // url = "https://slack.com/api/";
+    let url = "https://slack.com/api/";
     return url+methods[method];
 };
 let slack = function slack(method, channel, asUser, text){
@@ -33,8 +32,6 @@ let slack = function slack(method, channel, asUser, text){
             "content-type":"application/x-www-form-urlencoded"
         },
         data:$.param(payload)
-    }).then(function(data){
-        console.log(data);
     });
 };
-slack("postMessage","C9K0QKN3T",true, "test 4");
+slack("Test");
