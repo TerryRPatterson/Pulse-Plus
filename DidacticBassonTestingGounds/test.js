@@ -1,30 +1,40 @@
 /*global $*/
+"use strict";
 
 
+let methods = {
+    Test:"auth.test",/*Requires only auth token*/
+    ListChannels:"channels.list",/*Requires only auth token*/
+    postMessage:"chat.postMessage",/*Requires target channel, authtoken, and as user*/
+    ListMessages:"conversations.list",/*Requries only authToken*/
+    ListPrivate:"groups.list"
 
-let methods = [
-    "auth.test",/*Requires only auth token*/
-    "channels.list",/*Requires only auth token*/
-    "chat.postMessage",/*Requires target channel, authtoken, and as user*/
-    "conversations.list",/*Requries only authToken*/
-
-];
+};
 let url = function url(method){
     let url = "https://my-little-cors-proxy.herokuapp.com/https://slack.com/api/";
     // url = "https://slack.com/api/";
-    let authToken = localStorage["token"];
-    return url+methods[method]+"/?token="+authToken;
+    return url+methods[method];
 };
-
-$.ajax(url(2),{
-    method:"GET",
-    header:{
-        "Content-type":"application/x-www-form-urlencoded"
-    },
-    data:$.param({
-        "channel":"C9K0QKN3T",
-        "as_user":true,
-        "text":"Test"
-    })
-
-});
+let slack = function slack(method, channel, asUser, text){
+    let payload = {};
+    if (channel){
+        payload["channel"] = channel;
+    }
+    if (asUser ===  true){
+        payload["as_user"] = true;
+    }
+    if (text){
+        payload["text"] = text;
+    }
+    payload["token"] = localStorage["token"];
+    $.ajax(url(method),{
+        method:"POST",
+        header:{
+            "content-type":"application/x-www-form-urlencoded"
+        },
+        data:$.param(payload)
+    }).then(function(data){
+        console.log(data);
+    });
+};
+slack("postMessage","C9K0QKN3T",true, "test 4");
