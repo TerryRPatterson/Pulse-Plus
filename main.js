@@ -32,7 +32,7 @@ var getRateLimit = function() {
         });
 };
 
-getRateLimit();
+//getRateLimit();
 
 /**
  * Function retrieves and displays information about contributors on this
@@ -55,7 +55,7 @@ var listContributors = function() {
         });
 };
 
-listContributors();
+//listContributors();
 
 
 /**
@@ -82,7 +82,7 @@ var listIssues = function() {
         });
 };
 
-listIssues();
+//listIssues();
 
 /**
  * Function retrieves and displays information about commits made to this
@@ -106,7 +106,7 @@ var listCommits = function() {
             }
         });
 };
-listCommits();
+//listCommits();
 
 
 /**
@@ -141,4 +141,4 @@ var listPullRequests = function() {
         });
 };
 
-listPullRequests();
+//listPullRequests();
