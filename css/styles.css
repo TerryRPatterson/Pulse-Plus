@@ -4,8 +4,7 @@
 }
 
 .list {
-    /* display:flex; */
-    grid-template-columns: 300px;
+    display:flex;
     justify-content: space-around;
     flex-wrap: wrap;
 }
