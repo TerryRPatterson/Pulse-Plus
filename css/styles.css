@@ -1,0 +1,57 @@
+.nav-wrapper {
+    position: fixed;
+}
+
+.list {
+    display:flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.item {
+    color: white;
+    background-color: #19A79A;
+    width: 300px;
+}
+
+div > strong {
+    display: inline-block;
+    font-size: 1.5em;
+    margin: 10px 0px 10px 20px;
+    /* padding: 40px 0px 40px 0px; */
+}
+
+
+
+/* Smartphones (portrait and landscape) ----------- */
+@media (max-width : 480px) {
+/* Styles */
+.item {
+    flex-direction: column;
+    /* width: 95%; */
+    text-align: center;
+    padding: 10px;
+}
+}
+
+@media (min-width : 481px) {
+/* Styles */
+    .item {
+        flex-direction: row;
+        display: inline-block;
+        padding: 20px;
+    }
+}
+
+/* Desktops and laptops ----------- */
+@media (min-width : 993px) {
+/* Styles */
+    .brand-logo {
+        margin-left:20px;
+    }
+}
+
+/* Large screens ----------- */
+/* @media only screen  and (min-width : 1824px) { */
+/* Styles */
+/* } */
