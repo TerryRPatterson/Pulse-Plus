@@ -32,7 +32,7 @@ var getRateLimit = function() {
         });
 };
 
-//getRateLimit();
+getRateLimit();
 
 /**
  * Function retrieves and displays information about contributors on this
@@ -55,7 +55,7 @@ var listContributors = function() {
         });
 };
 
-//listContributors();
+listContributors();
 
 
 /**
@@ -82,7 +82,7 @@ var listIssues = function() {
         });
 };
 
-//listIssues();
+listIssues();
 
 /**
  * Function retrieves and displays information about commits made to this
@@ -106,7 +106,7 @@ var listCommits = function() {
             }
         });
 };
-//listCommits();
+listCommits();
 
 
 /**
@@ -141,4 +141,38 @@ var listPullRequests = function() {
         });
 };
 
-//listPullRequests();
+listPullRequests();
+
+let methods = {
+    Test:"auth.test",/*Requires only auth token*/
+    ListChannels:"channels.list",/*Requires only auth token*/
+    postMessage:"chat.postMessage",/*Requires target channel, authtoken, and as user*/
+    ListMessages:"conversations.list",/*Requries only authToken*/
+    ListPrivate:"groups.list"
+
+};
+let url = function url(method){
+    let url = "https://slack.com/api/";
+    return url+methods[method];
+};
+let slack = function slack(method, channel, asUser, text){
+    let payload = {};
+    if (channel){
+        payload["channel"] = channel;
+    }
+    if (asUser ===  true){
+        payload["as_user"] = true;
+    }
+    if (text){
+        payload["text"] = text;
+    }
+    payload["token"] = localStorage["token"];
+    $.ajax(url(method),{
+        method:"POST",
+        header:{
+            "content-type":"application/x-www-form-urlencoded"
+        },
+        data:$.param(payload)
+    });
+};
+slack("Test");
