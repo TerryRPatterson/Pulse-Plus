@@ -1,7 +1,6 @@
 /* main.js */
 /* eslint no-console:0 */
 /* github functionality */
-"use strict";
 var URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
 
 /**
