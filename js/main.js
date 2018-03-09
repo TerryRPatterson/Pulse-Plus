@@ -131,7 +131,7 @@ var listPullRequests = function(time) {
  */
 var generatePullIssueObj = function() {
     var pullIssueObj = {};
-    Promise.all([listPullRequests(), listIssues()])
+    return Promise.all([listPullRequests(), listIssues()])
         .then(function(results) {
             for(var i = 0; i < results[0].length; i++) {
                 //this should create timestamp property from creation date
@@ -143,6 +143,8 @@ var generatePullIssueObj = function() {
                 results[1][i]["ts"] = results[1][i]["updated_at"] / 1000;
                 pullIssueObj[results[1][i]["number"]] = results[1][i];
             }
+        }).then(function(){
+            return pullIssueObj;
         });
 };
 
