@@ -135,13 +135,13 @@ var generatePullIssueObj = function() {
         .then(function(results) {
             for(var i = 0; i < results[0].length; i++) {
                 //this should create timestamp property from creation date
-                results[0][i]['ts'] = results[0][i]['updated_at'] / 1000;
-                pullIssueObj[results[0][i]['number']] = results[0][i];
+                results[0][i]["ts"] = results[0][i]["updated_at"] / 1000;
+                pullIssueObj[results[0][i]["number"]] = results[0][i];
             }
             for(var i = 0; i < results[1].length; i++) {
                 //this should create timestamp property from creation date
-                results[1][i]['ts'] = results[1][i]['updated_at'] / 1000;
-                pullIssueObj[results[1][i]['number']] = results[1][i];
+                results[1][i]["ts"] = results[1][i]["updated_at"] / 1000;
+                pullIssueObj[results[1][i]["number"]] = results[1][i];
             }
         });
 };
