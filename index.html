@@ -19,16 +19,19 @@
         <nav>
             <div class="nav-wrapper">
                 <a href="#!" class="brand-logo">Pulse</a>
-                <a href="#issues" data-target="mobile-demo" class="issues_icon sidenav-trigger">
+                <a href="#issues" class="issues_icon sidenav-trigger">
                     <i class="large material-icons">priority_high</i>
                 </a>
-                <a href="#pulls" data-target="mobile-demo" class="pulls_icon sidenav-trigger">
+                <a href="#pulls" class="pulls_icon sidenav-trigger">
                     <i class="large material-icons">code</i>
                 </a>
-                <a href="#feed" data-target="mobile-demo" class="feed_icon sidenav-trigger">
+                <a href="#feed" class="feed_icon sidenav-trigger">
                     <i class="large material-icons">chat</i>
                 </a>
-                <a href="#!" data-target="mobile-demo" class="settings_icon sidenav-trigger">
+                <a href="#!" class="update_icon sidenav-trigger">
+                    <i class="large material-icons">sync</i>
+                </a>
+                <a href="#!" class="settings_icon sidenav-trigger">
                     <i class="large material-icons">settings</i>
                 </a>
                 <ul class="right hide-on-med-and-down">
@@ -65,7 +68,7 @@
     </header>
 
     <main>
-        <div class="issues">
+        <div class="issues" id="issues">
             <strong>Issues</strong>
             <ul class="list">
                 <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
@@ -79,7 +82,7 @@
                 <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
         </div>
-        <div class="pulls">
+        <div class="pulls" id="pulls">
             <strong>Pull Requests</strong>
             <ul class="list">
                 <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
@@ -93,7 +96,7 @@
                 <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
         </div>
-        <div class="feed">
+        <div class="feed" id="feed">
             <strong>Feed</strong>
             <ul class="feedList">
                 <li class="feedItem card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
@@ -106,14 +109,13 @@
                 <li class="feedItem card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
                 <li class="feedItem card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
-            <div class="input-field col s6" style="display:inline">
-                <input placeholder="Placeholder" id="first_name" type="text" class="validate">
-                <label for="first_name">Post to Slack</label>
-                <!-- <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-                    <i class="material-icons right">send</i>
-                </button> -->
-            </div>
-            <input >
+        </div>
+        <div class="input-field col s6">
+            <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+            <label for="first_name">Post to Slack</label>
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+                <i class="fab fa-slack-hash"></i>Post to Slack
+            </button>
         </div>
     </main>
     <footer>
