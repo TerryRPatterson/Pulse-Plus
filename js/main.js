@@ -147,7 +147,7 @@ let url = function url(method){
     return url+methods[method];
 };
 //takes method from method object, and an object contaning all options selected
-let slack = function slack(method, options){
+let slack = function slack(method, options={}){
     //channel, asUser, text, time
     let payload = {};
     let recievedData;
