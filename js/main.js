@@ -1,7 +1,10 @@
 /* main.js */
-/* eslint no-console:0 */
+/*global $*/
+/* eslint no-console:0
+no-unused-vars:0 */
 /* github functionality */
-var URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
+const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
+let githubData;
 
 /**
  * Function creates a Date object from an Unix time stamp.
@@ -32,7 +35,7 @@ var getRateLimit = function() {
         });
 };
 
-getRateLimit();
+// getRateLimit();
 
 /**
  * Function retrieves and displays information about contributors on this
@@ -55,7 +58,7 @@ var listContributors = function() {
         });
 };
 
-listContributors();
+// listContributors();
 
 
 /**
@@ -82,7 +85,7 @@ var listIssues = function() {
         });
 };
 
-listIssues();
+// listIssues();
 
 /**
  * Function retrieves and displays information about commits made to this
@@ -106,7 +109,7 @@ var listCommits = function() {
             }
         });
 };
-listCommits();
+// listCommits();
 
 
 /**
@@ -141,22 +144,21 @@ var listPullRequests = function() {
         });
 };
 
-listPullRequests();
+// listPullRequests();
 
 let methods = {
     Test:"auth.test",/*Requires only auth token*/
-    ListChannels:"channels.list",/*Requires only auth token*/
     postMessage:"chat.postMessage",/*Requires target channel, authtoken, and as user*/
-    ListMessages:"conversations.list",/*Requries only authToken*/
-    ListPrivate:"groups.list"
-
+    ListMessages:"conversations.history",/*Requries target, auth token*/
+    ListChannels:"conversations.list",
 };
 let url = function url(method){
     let url = "https://slack.com/api/";
     return url+methods[method];
 };
-let slack = function slack(method, channel, asUser, text){
+let slack = function slack(method, channel, asUser, text, time){
     let payload = {};
+    let recievedData;
     if (channel){
         payload["channel"] = channel;
     }
@@ -166,8 +168,14 @@ let slack = function slack(method, channel, asUser, text){
     if (text){
         payload["text"] = text;
     }
+    if (Number.isInteger(time)){
+        payload["oldest"] = time;
+    }
+    if (method === "ListChannels"){
+        payload["types"] = "public_channel,private_channel";
+    }
     payload["token"] = localStorage["token"];
-    $.ajax(url(method),{
+    return $.ajax(url(method),{
         method:"POST",
         header:{
             "content-type":"application/x-www-form-urlencoded"
@@ -175,4 +183,38 @@ let slack = function slack(method, channel, asUser, text){
         data:$.param(payload)
     });
 };
-slack("Test");
+
+/*Only pass latest changes of slack messages
+Takes an array of Messages*/
+let parseSlackData = function parseSlackData(slackData, githubData){
+    let regExpression = /(?:\s|^)G#(\d+)(?:\s|$)/gm;
+    slackData.forEach(function(message){
+        let text = message["text"];
+        let matchedItem = regExpression.exec(text);
+        while (matchedItem !== null){
+            console.log(githubData[matchedItem[1]]);
+            if (githubData[matchedItem[1]] !== undefined){
+                if (githubData[matchedItem[1]]["slackMessages"] !==
+                undefined){
+                    if (!githubData[matchedItem[1]]["slackMessages"]
+                        .includes(text)){
+                        githubData[matchedItem[1]]["slackMessages"].push(text);
+                    }
+                }
+                else{
+                    githubData[matchedItem[1]]["slackMessages"] = [];
+                    githubData[matchedItem[1]]["slackMessages"].push(text);
+                }
+                matchedItem = regExpression.exec(text);
+            }
+        }
+    });
+    return githubData;
+};
+let test;
+githubData = {3:{"slackMessages":[]},
+    2:{"slackMessages":[]}};
+slack("ListMessages","G9M6ERE94").then(function(data){
+    test = data;
+    githubData = parseSlackData(test["messages"],githubData);
+});
