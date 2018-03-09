@@ -78,6 +78,16 @@ var listIssues = function(time) {
             return response.json();
         });
 };
+/*
+var listIssues = function() {
+    var urlRequest = URL + "/issues";
+    // fetch returns array of json objects
+    return fetch(urlRequest)
+        .then(function(response) {
+            return response.json();
+        });
+};
+*/
 
 // listIssues();
 
@@ -215,3 +225,61 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     });
     return githubData;
 };
+
+// functions for populating list on page with issues ect
+
+/**
+ * Function appends <li> element with data from issue onto page.
+ * @param {object} issue - An issue object from GitHub.
+ */
+var makeIssueListItem = function(issue) {
+    var $issueList = $("#issues ul");
+    var $issueElement = $("<li>").addClass("item card");
+    $issueElement.attr("id", issue.number);
+    $issueElement.text("Issue# " + issue.number + " " + issue.title);
+    $issueList.append($issueElement);
+};
+
+/**
+ * Function appends <li> element with data from pull requests onto page.
+ * @param {object} pullRequest - An pull request object from GitHub.
+ */
+var makePullListItem = function(pullRequest) {
+    var $issueList = $("#pulls ul");
+    var $issueElement = $("<li>").addClass("item card");
+    $issueElement.attr("id", issue.number);
+    $issueElement.text("Issue# " + issue.number + " " + issue.title);
+    $issueList.append($issueElement);
+};
+
+/**
+ * Function gets all issues and creates and appends <li> elements to
+ * the page.
+ */
+
+var populateIssueList = function() {
+    // grab all issues
+    listIssues().then(function(results) {
+        for(var i = 0; i < results.length; i++) {
+            //console.log(results[i]);
+            makeIssueListItem(results[i]);
+        }
+    });
+};
+
+/**
+ * Function gets all pull requests and creates and appends <li> elements to
+ * the page.
+ */
+var populatePullList = function() {
+    // grab all issues
+    listPullRequests().then(function(results) {
+        for(var i = 0; i < results.length; i++) {
+            //console.log(results[i]);
+            makePullListItem(results[i]);
+        }
+    });
+};
+
+populateIssueList();
+populatePullList();
