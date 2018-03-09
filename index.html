@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +8,28 @@
     <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.0/normalize.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="stylesheet" href="./css/bootstrap.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="./css/materialize.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="./css/styles.css" />
     <title>Pulse</title>
 </head>
+
 <body>
     <header>
         <nav>
             <div class="nav-wrapper">
                 <a href="#!" class="brand-logo">Pulse</a>
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger">
-                    <i class="material-icons">menu</i>
+                <a href="#issues" data-target="mobile-demo" class="issues_icon sidenav-trigger">
+                    <i class="large material-icons">priority_high</i>
+                </a>
+                <a href="#pulls" data-target="mobile-demo" class="pulls_icon sidenav-trigger">
+                    <i class="large material-icons">code</i>
+                </a>
+                <a href="#feed" data-target="mobile-demo" class="feed_icon sidenav-trigger">
+                    <i class="large material-icons">chat</i>
+                </a>
+                <a href="#!" data-target="mobile-demo" class="settings_icon sidenav-trigger">
+                    <i class="large material-icons">settings</i>
                 </a>
                 <ul class="right hide-on-med-and-down">
                     <li>
@@ -36,7 +48,7 @@
             </div>
         </nav>
 
-        <ul class="sidenav" id="mobile-demo">
+        <!-- <ul class="sidenav" id="mobile-demo">
             <li>
                 <a href="sass.html">Sass</a>
             </li>
@@ -49,14 +61,15 @@
             <li>
                 <a href="mobile.html">Mobile</a>
             </li>
-        </ul>
+        </ul> -->
     </header>
 
     <main>
-        <div id="issues">
+        <div class="issues">
             <strong>Issues</strong>
             <ul class="list">
-                <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>  <!-- bg-primary mb-3 text-white-->
+                <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <!-- bg-primary mb-3 text-white-->
                 <li class="item card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
                 <li class="item card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
                 <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
@@ -66,38 +79,51 @@
                 <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
         </div>
-        <div id="pulls">
+        <div class="pulls">
             <strong>Pull Requests</strong>
             <ul class="list">
-                <li class="item card">Lorem</li>
-                <li class="item card">Ipsum</li>
-                <li class="item card">Foo</li>
-                <li class="item card">Bar</li>
-                <li class="item card">Lorem</li>
-                <li class="item card">Ipsum</li>
-                <li class="item card">Foo</li>
-                <li class="item card">Bar</li>
+                <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <!-- bg-primary mb-3 text-white-->
+                <li class="item card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="item card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="item card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="item card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
         </div>
-        <div id="feed">
+        <div class="feed">
             <strong>Feed</strong>
-            <ul class="list">
-                <li class="item card">Lorem</li>
-                <li class="item card">Ipsum</li>
-                <li class="item card">Foo</li>
-                <li class="item card">Bar</li>
-                <li class="item card">Lorem</li>
-                <li class="item card">Ipsum</li>
-                <li class="item card">Foo</li>
-                <li class="item card">Bar</li>
+            <ul class="feedList">
+                <li class="feedItem card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <!-- bg-primary mb-3 text-white-->
+                <li class="feedItem card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
+            <div class="input-field col s6" style="display:inline">
+                <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+                <label for="first_name">Post to Slack</label>
+                <!-- <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                    <i class="material-icons right">send</i>
+                </button> -->
+            </div>
+            <input >
         </div>
     </main>
     <footer>
 
     </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="./js/materialize.js"></script>
     <script src="./js/bootstrap.js"></script>
     <script src="./js/main.js"></script>
+    <script src="./js/page_function.js"></script>
 </body>
+
 </html>
