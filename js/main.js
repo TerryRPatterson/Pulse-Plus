@@ -58,6 +58,7 @@ var listContributors = function() {
         });
 };
 
+
 // listContributors();
 
 
@@ -68,20 +69,9 @@ var listContributors = function() {
 var listIssues = function() {
     var urlRequest = URL + "/issues";
     // fetch returns array of json objects
-    fetch(urlRequest)
+    return fetch(urlRequest)
         .then(function(response) {
             return response.json();
-        })
-        .then(function(json) {
-            console.log(json);
-            console.log("--------------------Issues---------------------");
-            for (var i = 0; i < json.length; i++) {
-                console.log("#" + i + "----------------------");
-                console.log("Issue #" + json[i]["number"]);
-                console.log("State " + json[i]["state"]);
-                console.log("Title: " + json[i]["title"]);
-                console.log("Body: " + json[i]["body"]);
-            }
         });
 };
 
@@ -109,8 +99,8 @@ var listCommits = function() {
             }
         });
 };
-// listCommits();
 
+// listCommits();
 
 /**
  * Function retrieves and displays information about pull requests in this
@@ -119,27 +109,27 @@ var listCommits = function() {
 var listPullRequests = function() {
     var urlRequest = URL + "/pulls";
     // fetch returns array of json objects
-    fetch(urlRequest)
+    return fetch(urlRequest)
         .then(function(response) {
             return response.json();
-        })
-        .then(function(json) {
-            console.log(json);
-            console.log("--------------------Pull Requests--------------");
-            for (var i = 0; i < json.length; i++) {
-                console.log("#" + i + "----------------------");
-                console.log("Number:" + json[i]["number"]);
-                console.log("State:" + json[i]["state"]);
-                console.log("Title:" + json[i]["title"]);
-                console.log("Body:" + json[i]["body"]);
+        });
+};
 
-                console.log("Open Issues:" + json[i]["open_issues"]);
-                console.log("Closed Issues:" + json[i]["closed_issues"]);
-
-                console.log("Created on:" + json[i]["created_at"]);
-                console.log("Updated on:" + json[i]["updated_at"]);
-                console.log("Closed on:" + json[i]["closed_at"]);
-                console.log("Due on:" + json[i]["due_on"]);
+/**
+ * Function creates one big object containing all issues and pull requests.
+ * form {
+ *       number: {issue or pull request object}
+ *      }
+ */
+var generatePullIssueObj = function() {
+    var pullIssueObj = {};
+    Promise.all([listPullRequests(), listIssues()])
+        .then(function(results) {
+            for(var i = 0; i < results[0].length; i++) {
+                pullIssueObj[results[0][i]['number']] = results[0][i];
+            }
+            for(var i = 0; i < results[1].length; i++) {
+                pullIssueObj[results[1][i]['number']] = results[1][i];
             }
         });
 };
