@@ -5,7 +5,7 @@ no-unused-vars:0 */
 /* github functionality */
 const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
 let githubData;
-
+let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
 /**
  * Function creates a Date object from an Unix time stamp.
  * @param {int} timestamp - An Unix time stamp.
@@ -148,9 +148,8 @@ let url = function url(method){
 };
 //takes method from method object, and an object contaning all options selected
 let slack = function slack(method, options={}){
-    //channel, asUser, text, time
+    //channel, asUser, text, oldest
     let payload = {};
-    let recievedData;
     if (options["channel"]){
         payload["channel"] = options["channel"];
     }
@@ -190,16 +189,31 @@ let parseSlackData = function parseSlackData(slackData, githubData){
                 undefined){
                     if (!githubData[matchedItem[1]]["slackMessages"]
                         .includes(text)){
-                        githubData[matchedItem[1]]["slackMessages"].push(text);
+                        githubData[matchedItem[1]]["slackMessages"].push(message);
                     }
                 }
                 else{
                     githubData[matchedItem[1]]["slackMessages"] = [];
-                    githubData[matchedItem[1]]["slackMessages"].push(text);
+                    githubData[matchedItem[1]]["slackMessages"].push(message);
                 }
                 matchedItem = regExpression.exec(text);
             }
         }
     });
     return githubData;
+};
+let updateData = function updateData(latestSlackMessage){
+    watchedChannels.forEach(function(channel){
+        let hasMore = true;
+        while (hasMore){
+            slack("ListMessages",{"channel":channel, "time":latestSlackMessage})
+                .then(function(data){
+                    githubData = parseSlackData(data["messages"],githubData);
+                    if (data["hasMore"]){
+                        latestSlackMessage = data["latest"];
+                    }
+                    else{hasMore = false;}
+                });
+        }
+    });
 };
