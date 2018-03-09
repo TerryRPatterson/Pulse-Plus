@@ -126,10 +126,10 @@ var generatePullIssueObj = function() {
     Promise.all([listPullRequests(), listIssues()])
         .then(function(results) {
             for(var i = 0; i < results[0].length; i++) {
-                pullIssueObj[results[0][i]['number']] = results[0][i];
+                pullIssueObj[results[0][i]["number"]] = results[0][i];
             }
             for(var i = 0; i < results[1].length; i++) {
-                pullIssueObj[results[1][i]['number']] = results[1][i];
+                pullIssueObj[results[1][i]["number"]] = results[1][i];
             }
         });
 };
