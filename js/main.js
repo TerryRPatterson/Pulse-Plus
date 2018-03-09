@@ -211,10 +211,3 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     });
     return githubData;
 };
-let test;
-githubData = {3:{"slackMessages":[]},
-    2:{"slackMessages":[]}};
-slack("ListMessages","G9M6ERE94").then(function(data){
-    test = data;
-    githubData = parseSlackData(test["messages"],githubData);
-});
