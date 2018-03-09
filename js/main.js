@@ -66,8 +66,12 @@ var listContributors = function() {
  * Function retrieves and displays information on issues in this
  * repository.
  */
-var listIssues = function() {
+var listIssues = function(time) {
     var urlRequest = URL + "/issues";
+    if (time != undefined) {
+        let datestring = convertUnixTime(time);
+        urlRequest += "?since=" + datestring;
+    }
     // fetch returns array of json objects
     return fetch(urlRequest)
         .then(function(response) {
@@ -106,8 +110,12 @@ var listCommits = function() {
  * Function retrieves and displays information about pull requests in this
  * repository.
  */
-var listPullRequests = function() {
+var listPullRequests = function(time) {
     var urlRequest = URL + "/pulls";
+    if (time != undefined) {
+        let datestring = convertUnixTime(time);
+        urlRequest += "?since=" + datestring;
+    }
     // fetch returns array of json objects
     return fetch(urlRequest)
         .then(function(response) {
@@ -126,10 +134,14 @@ var generatePullIssueObj = function() {
     Promise.all([listPullRequests(), listIssues()])
         .then(function(results) {
             for(var i = 0; i < results[0].length; i++) {
-                pullIssueObj[results[0][i]["number"]] = results[0][i];
+                //this should create timestamp property from creation date
+                results[0][i]['ts'] = results[0][i]['updated_at'] / 1000;
+                pullIssueObj[results[0][i]['number']] = results[0][i];
             }
             for(var i = 0; i < results[1].length; i++) {
-                pullIssueObj[results[1][i]["number"]] = results[1][i];
+                //this should create timestamp property from creation date
+                results[1][i]['ts'] = results[1][i]['updated_at'] / 1000;
+                pullIssueObj[results[1][i]['number']] = results[1][i];
             }
         });
 };
