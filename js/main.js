@@ -139,27 +139,29 @@ var generatePullIssueObj = function() {
 let methods = {
     Test:"auth.test",/*Requires only auth token*/
     postMessage:"chat.postMessage",/*Requires target channel, authtoken, and as user*/
-    ListMessages:"conversations.history",/*Requries target, auth token*/
-    ListChannels:"conversations.list",
+    ListMessages:"conversations.history",/*Requries target, auth token, accepts time*/
+    ListChannels:"conversations.list",/*Requres auth token*/
 };
 let url = function url(method){
     let url = "https://slack.com/api/";
     return url+methods[method];
 };
-let slack = function slack(method, channel, asUser, text, time){
+//takes method from method object, and an object contaning all options selected
+let slack = function slack(method, options){
+    //channel, asUser, text, time
     let payload = {};
     let recievedData;
-    if (channel){
-        payload["channel"] = channel;
+    if (options["channel"]){
+        payload["channel"] = options["channel"];
     }
-    if (asUser ===  true){
+    if (options["asUser"] ===  true){
         payload["as_user"] = true;
     }
-    if (text){
-        payload["text"] = text;
+    if (options["text"]){
+        payload["text"] = options["text"];
     }
-    if (Number.isInteger(time)){
-        payload["oldest"] = time;
+    if (Number.isInteger(options["time"])){
+        payload["oldest"] = options["time"];
     }
     if (method === "ListChannels"){
         payload["types"] = "public_channel,private_channel";
