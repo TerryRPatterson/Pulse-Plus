@@ -1,6 +1,42 @@
-.nav-wrapper {
-    display: inline;
+
+header {
     position: fixed;
+    z-index: 100;
+    width: 100vw;
+}
+
+.clear {
+    display:block;
+    height: 100px;
+}
+
+.topnav {
+    background-color: #28262C;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 2em;
+    font-weight: 600;
+    height:40px;
+}
+
+li span {
+    font-style: oblique;
+}
+
+.logo {
+    font-size: 2em;
+    font-weight: 600;
+}
+
+.bottomnav {
+    background-color: #28262C;
+    box-shadow: 0 2px 1px -1px gray;
+}
+
+.bottomnav > ul {
+    display: flex;
+    justify-content: space-around;
 }
 
 .list {
@@ -14,7 +50,7 @@ main {
     grid-template-areas: "issues"
                          "pulls"
                          "feed";
-
+    padding-top: 120px;
 }
 
 .hidden {
@@ -57,27 +93,47 @@ main {
     width: 95%;
     border: none;
     box-shadow: none;
-    /* padding: 0px 0px 10px 20px; */
+    padding: 0px 0px 10px 20px;
 }
 
-div > strong {
-    display: inline-block;
+strong {
+    display: fixed;
     font-size: 1.5em;
-    /* margin: 10px 0px 10px 20px; */
-    /* padding: 40px 0px 40px 0px; */
+    z-index:2;
+    margin: 10px 0px 10px 20px;
+    padding: 40px 0px 40px 0px;
 }
 
-@media (max-width: 400px) {
-    a.brand-logo {
+@media (max-width: 599px) {
+    .logo {
         display: none;
     }
 }
 
 @media (min-width: 600px) {
+    .topnav {
+        display: none;
+    }
+
+    .bottomnav {
+        display: block;
+        padding: 0px 10px 0px 20px;
+    }
+
+    .bottomnav > ul {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .bottomnav ul li:first-child {
+        flex: 1;
+    }
+
     main {
         grid-template-columns: 1fr 1fr;
         grid-template-areas: "issues pulls"
                              "feed feed";
+        padding-top: 70px;
     }
 
     .issues {
