@@ -5,15 +5,16 @@
 
 .list {
     display: grid;
+    justify-items: center;
 }
 
 main {
     display: grid;
-    /* justify-items: center; */
     grid-template-columns: 1fr ;
     grid-template-areas: "issues"
                          "pulls"
                          "feed";
+
 }
 
 .hidden {
