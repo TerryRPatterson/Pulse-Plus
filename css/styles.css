@@ -1,58 +1,210 @@
-
-.nav-wrapper {
+header {
     position: fixed;
+    z-index: 100;
+    width: 100vw;
+}
+
+.clear {
+    display:block;
+    height: 100px;
+}
+
+.topnav {
+    background-color: #28262C;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 2em;
+    font-weight: 600;
+    height:40px;
+}
+
+.fa-code-branch {
+    font-size: 1.5em;
+}
+
+li > span {
+    font-style: oblique;
+}
+
+.logo {
+    font-size: 2em;
+    font-weight: 600;
+}
+
+.bottomnav {
+    background-color: #28262C;
+    box-shadow: 0 2px 1px -1px gray;
+}
+
+.bottomnav > ul {
+    display: flex;
+    justify-content: space-around;
 }
 
 .list {
-    display:flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    display: grid;
+    justify-items: center;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-areas: "issues"
+                         "pulls"
+                         "feed";
+    padding-top: 120px;
+}
+
+.hidden {
+    display: none;
+}
+
+.issues {
+    grid-area: issues;
+    overflow: scroll;
+}
+
+.pulls {
+    grid-area: pulls;
+    overflow: scroll;
+}
+
+.feed {
+    grid-area: feed;
+    overflow: scroll;
+    padding-bottom: 100px;
+}
+
+.input-field {
+    margin-top: 15px;
 }
 
 .item {
     color: white;
     background-color: #19A79A;
-    width: 300px;
-}
-
-div > strong {
-    display: inline-block;
-    font-size: 1.5em;
-    margin: 10px 0px 10px 20px;
-    /* padding: 40px 0px 40px 0px; */
-}
-
-
-
-/* Smartphones (portrait and landscape) ----------- */
-@media (max-width : 480px) {
-/* Styles */
-.item {
-    flex-direction: column;
-    /* width: 95%; */
+    width:95%;
     text-align: center;
-    padding: 10px;
-}
+    padding: 20px;
 }
 
-@media (min-width : 481px) {
-/* Styles */
-    .item {
-        flex-direction: row;
-        display: inline-block;
-        padding: 20px;
+.feedList {
+    /* display: grid; */
+    /* grid-template-columns: repeat(1, auto); */
+    grid-row: span 3;
+    background-color: #f5f5f5;
+}
+
+.feedItem {
+    color: #000000;
+    background-color: #f5f5f5;
+    width: 95%;
+    border: none;
+    box-shadow: none;
+    padding: 10px 0px 0px 20px;
+}
+
+.slack {
+    font-family: 'Lato', Arial, Helvetica, sans-serif;
+    text-transform: none;
+    height: 5vh;
+}
+
+footer {
+    position: fixed;
+    z-index: 99;
+    left: 0;
+    bottom: 0;
+    background-color: white;
+    width: 100vw;
+}
+
+button > span {
+    font-weight: 800;
+    font-style: none;
+    width: 100vw;
+}
+
+strong {
+    display: fixed;
+    font-size: 1.5em;
+    z-index:2;
+    margin: 10px 0px 10px 20px;
+    padding: 40px 0px 40px 0px;
+}
+
+@media (max-width: 599px) {
+    .logo {
+        display: none;
+    }
+
+    .fa-code-branch {
+        transform: rotate(180deg) scaleX(-1) translate(0px, -2px);
+    }
+
+    ul li div {
+        margin: -10px 0px -10px 0px;
     }
 }
 
-/* Desktops and laptops ----------- */
-@media (min-width : 993px) {
-/* Styles */
-    .brand-logo {
-        margin-left:20px;
+@media (min-width: 600px) {
+    .fa-code-branch {
+    transform: rotate(180deg) scaleX(-1);
+    }
+
+    .topnav {
+        display: none;
+    }
+
+    .bottomnav {
+        display: block;
+        padding: 0px 10px 0px 20px;
+    }
+
+    .bottomnav > ul {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .bottomnav ul li:first-child {
+        flex: 1;
+    }
+
+    main {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "issues pulls"
+                             "feed feed";
+        padding-top: 70px;
+    }
+
+    .issues {
+        display: block;
+        height: 45vh;
+        overflow: scroll;
+    }
+
+    .pulls {
+        display: block;
+        height: 45vh;
+        overflow: scroll;
+    }
+
+    .feed {
+        display: block;
+        grid-area: feed;
+        height:250px;
+        width: 95vw;
+        /* height: calc(50vh-64px); */
+        overflow: scroll;
+        margin: 0 auto;
+    }
+
+    .messaging {
+        display: block;
+    }
+
+    .input-field {
+        width: 95vw;
+        margin: 15px auto 14px;
     }
 }
-
-/* Large screens ----------- */
-/* @media only screen  and (min-width : 1824px) { */
-/* Styles */
-/* } */
