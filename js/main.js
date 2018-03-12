@@ -10,7 +10,7 @@ let githubData = {};
 let slackMessages = [];
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
 /**
- * Function creates a Date object from an Unix time stamp. In order to 
+ * Function creates a Date object from an Unix time stamp. In order to
  * present human readable form of time.
  * @param {int} timestamp - An Unix time stamp.
  * @return {string} The current time.
@@ -43,7 +43,7 @@ var getRateLimit = function() {
         });
 };
 
- getRateLimit();
+getRateLimit();
 
 /**
  * Function retrieves and displays information about contributors on this
@@ -334,7 +334,12 @@ let refreshFunctions = function refreshFunctions(){
             if (data["hasMore"]){
                 slack("ListMessages",{"channel":channel, "time":data["latest"]},
                     callback).then(function(data){
-                    slackMessages = slackMessages.concat(data["messages"]);
+                    slackMessages = slackMessages.concat(data["messages"]
+                        .map(function(message){
+                            message["type"] = "slack";
+                            return message;
+                        })
+                    );
                 });
             }
         };
@@ -344,21 +349,32 @@ let refreshFunctions = function refreshFunctions(){
                     if (latestSlackMessage < data["latest"]){
                         latestSlackMessage = data["latest"];
                     }
-                    slackMessages = slackMessages.concat(data["messages"]);
+                    slackMessages = slackMessages.concat(data["messages"]
+                        .map(function(message){
+                            message["type"] = "slack";
+                            console.log(message);
+                            return message;
+                        })
+                    );
                 });
         });
-
     };
     let latestSlackMessage;
     document.querySelector(".update_icon").addEventListener("click",function(event){
         latestSlackMessage = updateData(latestSlackMessage);
+        feedUpdate(slackMessages);
     });
     setInterval(function(){
         latestSlackMessage = updateData(latestSlackMessage);
+        feedUpdate(slackMessages);
     },5000);
+    latestSlackMessage = updateData(latestSlackMessage);
+    feedUpdate(slackMessages);
 };
 let feedUpdate = function feedUpdate(messages){
     let feed = document.querySelector("#feed");
+    feed.parentNode.replaceChild(feed.cloneNode(false),feed);
+    feed = document.querySelector("#feed");
     messages.sort(function(a,b){
         if (a.ts < b.ts){
             return -1;
