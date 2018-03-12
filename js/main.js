@@ -160,6 +160,8 @@ var listPullRequests = function(time) {
  * Function creates one big object containing all issues and pull requests.
  * form {
  *       number: {issue or pull request object}
+ *       ts : timestamp
+ *       type: pull or issue
  *      }
  */
 var generatePullIssueObj = function(pullIssueObj={}){
@@ -181,11 +183,13 @@ var generatePullIssueObj = function(pullIssueObj={}){
             //this should create timestamp property from creation date
                 results[0][i]["ts"] = results[0][i]["updated_at"] / 1000;
                 pullIssueObj[results[0][i]["number"]] = results[0][i];
+                pullIssueObj[results[0][i]["type"]] = "pull";
             }
             for(let i = 0; i < results[1].length; i++) {
             //this should create timestamp property from creation date
                 results[1][i]["ts"] = results[1][i]["updated_at"] / 1000;
                 pullIssueObj[results[1][i]["number"]] = results[1][i];
+                pullIssueObj[results[1][i]["type"]] = "issue";
             }
         }).then(function(){
             return pullIssueObj;
