@@ -4,9 +4,10 @@
 no-unused-vars:0 */
 /* github functionality */
 const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
-const GITHUB_TOKEN = "247b55f6e66dd99507bbab946d5016846ee06b21";
+const GITHUB_TOKEN = localStorage.getItem("GitToken");
 
 let githubData = {};
+let slackMessages = [];
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
 /**
  * Function creates a Date object from an Unix time stamp. In order to 
@@ -180,13 +181,13 @@ var generatePullIssueObj = function(pullIssueObj={}){
     return Promise.all([listPullRequests(time), listIssues(time)])
         .then(function(results) {
             for(let i = 0; i < results[0].length; i++) {
-            //this should create timestamp property from creation date
+            //this should create timestamp property from updated date
                 results[0][i]["ts"] = results[0][i]["updated_at"] / 1000;
                 pullIssueObj[results[0][i]["number"]] = results[0][i];
                 pullIssueObj[results[0][i]["type"]] = "pull";
             }
             for(let i = 0; i < results[1].length; i++) {
-            //this should create timestamp property from creation date
+            //this should create timestamp property from update date
                 results[1][i]["ts"] = results[1][i]["updated_at"] / 1000;
                 pullIssueObj[results[1][i]["number"]] = results[1][i];
                 pullIssueObj[results[1][i]["type"]] = "issue";
@@ -209,7 +210,7 @@ let url = function url(method){
     return url+methods[method];
 };
 //takes method from method object, and an object contaning all options selected
-let slack = function slack(method, options={},promiseCallback){
+let slack = function slack(method, options={},promiseCallback=function(data){return data;}){
     //channel, asUser, text, oldest
     let payload = {};
     if (options["channel"]){
@@ -228,15 +229,17 @@ let slack = function slack(method, options={},promiseCallback){
         payload["types"] = "public_channel,private_channel";
     }
     payload["token"] = localStorage["token"];
-    return $.ajax(url(method),{
+    let recivedData = $.ajax(url(method),{
         method:"POST",
         header:{
             "content-type":"application/x-www-form-urlencoded"
         },
         data:$.param(payload)
-    }).then(function(data){
+    });
+    recivedData.then(function(data){
         promiseCallback(data);
     });
+    return recivedData;
 };
 
 /*Only pass latest changes of slack messages
@@ -247,7 +250,6 @@ let parseSlackData = function parseSlackData(slackData, githubData){
         let text = message["text"];
         let matchedItem = regExpression.exec(text);
         while (matchedItem !== null){
-            console.log(githubData[matchedItem[1]]);
             if (githubData[matchedItem[1]] !== undefined){
                 if (githubData[matchedItem[1]]["slackMessages"] !==
                 undefined){
@@ -266,23 +268,6 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     });
     return githubData;
 };
-
-let updateData = function updateData(latestSlackMessage){
-    githubData = generatePullIssueObj(githubData);
-    let callback = function(data){
-        githubData = parseSlackData(data["messages"],githubData);
-        if (data["hasMore"]){
-            slack("ListMessages",{"channel":channel, "time":data["latest"]},callback);
-        }
-        return data;
-    };
-    watchedChannels.forEach(function(channel){
-        let hasMore = true;
-        slack("ListMessages",{"channel":channel, "time":latestSlackMessage},callback);
-    });
-
-};
-
 // functions for populating list on page with issues ect
 
 /**
@@ -340,3 +325,74 @@ var populatePullList = function() {
 
 populateIssueList();
 populatePullList();
+
+let refreshFunctions = function refreshFunctions(){
+    let updateData = function updateData(timestamp){
+        githubData = generatePullIssueObj(githubData);
+        let callback = function(data){
+            githubData = parseSlackData(data["messages"],githubData);
+            if (data["hasMore"]){
+                slack("ListMessages",{"channel":channel, "time":data["latest"]},
+                    callback).then(function(data){
+                    slackMessages = slackMessages.concat(data["messages"]);
+                });
+            }
+        };
+        watchedChannels.forEach(function(channel){
+            slack("ListMessages",{"channel":channel, "time":timestamp},callback)
+                .then(function(data){
+                    if (latestSlackMessage < data["latest"]){
+                        latestSlackMessage = data["latest"];
+                    }
+                    slackMessages = slackMessages.concat(data["messages"]);
+                });
+        });
+
+    };
+    let latestSlackMessage;
+    document.querySelector(".update_icon").addEventListener("click",function(event){
+        latestSlackMessage = updateData(latestSlackMessage);
+    });
+    setInterval(function(){
+        latestSlackMessage = updateData(latestSlackMessage);
+    },5000);
+};
+let feedUpdate = function feedUpdate(messages){
+    let feed = document.querySelector("#feed");
+    messages.sort(function(a,b){
+        if (a.ts < b.ts){
+            return -1;
+        }
+        else if (a.ts > b.ts){
+            return 1;
+        }
+        else if (a.ts === b.ts){
+            return 0;
+        }
+        else {
+            throw new Error("A sorting error has occured");
+        }
+    });
+    messages.forEach(function(messageObject){
+        let container = document.createElement("li");
+        let image = document.createElement("img");
+        let mainText = document.createElement("p");
+        let timestamp = document.createElement("aside");
+        image.classList.add("icon");
+        if (messageObject["service"] === undefined){
+            image.setAttribute("src","Slack_Icon.png");
+            mainText.textContent = `User: ${messageObject["user"]} Message: ` +
+                                    `${messageObject["text"]} \n` ;
+        }
+        timestamp.textContent = `${convertUnixTime(messageObject["ts"])}`;
+        timestamp.classList.add("timestamp");
+        container.appendChild(image);
+        container.appendChild(mainText);
+        container.appendChild(timestamp);
+        container.classList.add("feedItem", "card");
+        feed.appendChild(container);
+
+    });
+
+};
+refreshFunctions();

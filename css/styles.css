@@ -217,6 +217,17 @@ strong {
         margin: 15px auto 14px;
     }
 
+}
+.icon {
+    display: inline;
+    width: 20px;
+    height: 20px;
+}
+.timestamp{
+    font-size: 10px;
+}
+
+
     .ghfeed {
         /* margin: 10px auto; */
         width: 45vw;
@@ -224,3 +235,4 @@ strong {
         /* text-align: center; */
     }
 }
+
