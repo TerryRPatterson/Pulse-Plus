@@ -101,7 +101,7 @@ main {
     width: 95%;
     border: none;
     box-shadow: none;
-    padding: 0px 0px 10px 20px;
+    padding: 10px 0px 0px 20px;
 }
 
 .slack {
@@ -189,7 +189,15 @@ strong {
 
     .feed {
         grid-area: feed;
-        height: calc(50vh-64px);
+        height:250px;
+        width: 95vw;
+        /* height: calc(50vh-64px); */
         overflow: scroll;
+        margin: 0 auto;
+    }
+
+    .input-field {
+        width: 95vw;
+        margin: 15px auto 14px;
     }
 }

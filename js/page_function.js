@@ -7,16 +7,19 @@ var pulls = document.querySelector(".pulls").classList;
 var feed = document.querySelector(".feed").classList;
 
 issues_panel.addEventListener("click", () => {
-    pulls.toggle("hidden");
-    feed.toggle("hidden");
+    issues.remove("hidden");
+    pulls.add("hidden");
+    feed.add("hidden");
 });
 
 pulls_panel.addEventListener("click", () => {
-    issues.toggle("hidden");
-    feed.toggle("hidden");
+    pulls.remove("hidden");
+    issues.add("hidden");
+    feed.add("hidden");
 });
 
 feed_panel.addEventListener("click", () => {
-    issues.toggle("hidden");
-    pulls.toggle("hidden");
+    feed.remove("hidden");
+    issues.add("hidden");
+    pulls.add("hidden");
 });
