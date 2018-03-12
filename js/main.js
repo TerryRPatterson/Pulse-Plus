@@ -7,6 +7,7 @@ const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
 const GITHUB_TOKEN = "f75e64d4f8afbb6c3187e38a648b71cecbf01a74";
 
 let githubData = {};
+let slackMessages = [];
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
 /**
  * Function creates a Date object from an Unix time stamp.
@@ -204,7 +205,7 @@ let url = function url(method){
     return url+methods[method];
 };
 //takes method from method object, and an object contaning all options selected
-let slack = function slack(method, options={},promiseCallback){
+let slack = function slack(method, options={},promiseCallback=function(data){return data;}){
     //channel, asUser, text, oldest
     let payload = {};
     if (options["channel"]){
@@ -261,23 +262,6 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     });
     return githubData;
 };
-
-let updateData = function updateData(timestamp){
-    githubData = generatePullIssueObj(githubData);
-    let callback = function(data){
-        githubData = parseSlackData(data["messages"],githubData);
-        if (data["hasMore"]){
-            slack("ListMessages",{"channel":channel, "time":data["latest"]},callback);
-        }
-        return data;
-    };
-    watchedChannels.forEach(function(channel){
-        let hasMore = true;
-        return slack("ListMessages",{"channel":channel, "time":timestamp},callback)["latest"];
-    });
-
-};
-
 // functions for populating list on page with issues ect
 
 /**
@@ -337,6 +321,26 @@ populateIssueList();
 populatePullList();
 
 let refreshFunctions = function refreshFunctions(){
+    let updateData = function updateData(timestamp){
+        githubData = generatePullIssueObj(githubData);
+        let callback = function(data){
+            githubData = parseSlackData(data["messages"],githubData);
+            if (data["hasMore"]){
+                slackMessages = slackMessages.concat(slack("ListMessages",{
+                    "channel":channel, "time":data["latest"]},callback)["messages"]);
+            }
+            return data;
+        };
+        watchedChannels.forEach(function(channel){
+            let recivedData = slack("ListMessages",{"channel":channel, "time":timestamp},callback);
+            let hasMore = true;
+            if (latestSlackMessage < recivedData["latest"]){
+                latestSlackMessage = recivedData["latest"];
+            }
+            slackMessages = slackMessages.concat(recivedData["messages"]);
+        });
+
+    };
     let latestSlackMessage;
     Document.querySelector(".update_icon").addEventListener(function(event){
         latestSlackMessage = updateData(latestSlackMessage);
