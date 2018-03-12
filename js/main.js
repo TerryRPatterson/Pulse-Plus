@@ -262,8 +262,6 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     });
     return githubData;
 };
-
-
 // functions for populating list on page with issues ect
 
 /**
