@@ -138,25 +138,25 @@ var generatePullIssueObj = function(pullIssueObj={}){
                 lastCheck = entry["updated_at"];
             }
         });
-        if (lastCheck){
-            time = lastCheck;
-        }
-        return Promise.all([listPullRequests(time), listIssues(time)])
-            .then(function(results) {
-                for(let i = 0; i < results[0].length; i++) {
-                //this should create timestamp property from creation date
-                    results[0][i]["ts"] = results[0][i]["updated_at"] / 1000;
-                    pullIssueObj[results[0][i]["number"]] = results[0][i];
-                }
-                for(let i = 0; i < results[1].length; i++) {
-                //this should create timestamp property from creation date
-                    results[1][i]["ts"] = results[1][i]["updated_at"] / 1000;
-                    pullIssueObj[results[1][i]["number"]] = results[1][i];
-                }
-            }).then(function(){
-                return pullIssueObj;
-            });
     }
+    if (lastCheck){
+        time = lastCheck;
+    }
+    return Promise.all([listPullRequests(time), listIssues(time)])
+        .then(function(results) {
+            for(let i = 0; i < results[0].length; i++) {
+            //this should create timestamp property from creation date
+                results[0][i]["ts"] = results[0][i]["updated_at"] / 1000;
+                pullIssueObj[results[0][i]["number"]] = results[0][i];
+            }
+            for(let i = 0; i < results[1].length; i++) {
+            //this should create timestamp property from creation date
+                results[1][i]["ts"] = results[1][i]["updated_at"] / 1000;
+                pullIssueObj[results[1][i]["number"]] = results[1][i];
+            }
+        }).then(function(){
+            return pullIssueObj;
+        });
 };
 
 // listPullRequests();
