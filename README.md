@@ -7,10 +7,7 @@
 
 ## Libraries
 * [D3.js](https://d3js.org/)
-* [Sass](https://sass-lang.com)
 
-## General Style 
+## General Style
 * [Material Design](https://material.io/guidelines/)
 * [ESLint](https://eslint.org/)
-
-
