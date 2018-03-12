@@ -263,26 +263,6 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     return githubData;
 };
 
-let updateData = function updateData(timestamp){
-    githubData = generatePullIssueObj(githubData);
-    let callback = function(data){
-        githubData = parseSlackData(data["messages"],githubData);
-        if (data["hasMore"]){
-            slackMessages = slackMessages.concat(slack("ListMessages",{
-                "channel":channel, "time":data["latest"]},callback)["messages"]);
-        }
-        return data;
-    };
-    watchedChannels.forEach(function(channel){
-        let recivedData = slack("ListMessages",{"channel":channel, "time":timestamp},callback);
-        let hasMore = true;
-        if (latestSlackMessage < recivedData["latest"]){
-            latestSlackMessage = recivedData["latest"];
-        }
-        slackMessages = slackMessages.concat(recivedData["messages"]);
-    });
-
-};
 
 // functions for populating list on page with issues ect
 
@@ -341,3 +321,33 @@ var populatePullList = function() {
 
 populateIssueList();
 populatePullList();
+
+let refreshFunctions = function refreshFunctions(){
+    let updateData = function updateData(timestamp){
+        githubData = generatePullIssueObj(githubData);
+        let callback = function(data){
+            githubData = parseSlackData(data["messages"],githubData);
+            if (data["hasMore"]){
+                slackMessages = slackMessages.concat(slack("ListMessages",{
+                    "channel":channel, "time":data["latest"]},callback)["messages"]);
+            }
+            return data;
+        };
+        watchedChannels.forEach(function(channel){
+            let recivedData = slack("ListMessages",{"channel":channel, "time":timestamp},callback);
+            let hasMore = true;
+            if (latestSlackMessage < recivedData["latest"]){
+                latestSlackMessage = recivedData["latest"];
+            }
+            slackMessages = slackMessages.concat(recivedData["messages"]);
+        });
+
+    };
+    let latestSlackMessage;
+    Document.querySelector(".update_icon").addEventListener(function(event){
+        latestSlackMessage = updateData(latestSlackMessage);
+    });
+    setInterval(5000,function(){
+        latestSlackMessage = updateData(latestSlackMessage);
+    });
+};
