@@ -182,7 +182,7 @@ let url = function url(method){
     return url+methods[method];
 };
 //takes method from method object, and an object contaning all options selected
-let slack = function slack(method, options={}){
+let slack = function slack(method, options={},promiseCallback){
     //channel, asUser, text, oldest
     let payload = {};
     if (options["channel"]){
@@ -207,6 +207,8 @@ let slack = function slack(method, options={}){
             "content-type":"application/x-www-form-urlencoded"
         },
         data:$.param(payload)
+    }).then(function(data){
+        promiseCallback(data);
     });
 };
 
@@ -231,8 +233,8 @@ let parseSlackData = function parseSlackData(slackData, githubData){
                     githubData[matchedItem[1]]["slackMessages"] = [];
                     githubData[matchedItem[1]]["slackMessages"].push(message);
                 }
-                matchedItem = regExpression.exec(text);
             }
+            matchedItem = regExpression.exec(text);
         }
     });
     return githubData;
@@ -240,20 +242,16 @@ let parseSlackData = function parseSlackData(slackData, githubData){
 
 let updateData = function updateData(latestSlackMessage){
     githubData = generatePullIssueObj(githubData);
+    let callback = function(data){
+        githubData = parseSlackData(data["messages"],githubData);
+        if (data["hasMore"]){
+            slack("ListMessages",{"channel":channel, "time":data["latest"]},callback);
+        }
+        return data;
+    };
     watchedChannels.forEach(function(channel){
         let hasMore = true;
-        while (hasMore){
-            slack("ListMessages",{"channel":channel, "time":latestSlackMessage})
-                .then(function(data){
-                    githubData = parseSlackData(data["messages"],githubData);
-                    if (data["hasMore"]){
-                        latestSlackMessage = data["latest"];
-                    }
-                    else{
-                        hasMore = false;
-                    }
-                });
-        }
+        slack("ListMessages",{"channel":channel, "time":latestSlackMessage},callback);
     });
 
 };
