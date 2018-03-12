@@ -4,7 +4,7 @@
 no-unused-vars:0 */
 /* github functionality */
 const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
-let githubData;
+let githubData = {};
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
 /**
  * Function creates a Date object from an Unix time stamp.
@@ -68,7 +68,7 @@ var listContributors = function() {
  */
 var listIssues = function(time) {
     var urlRequest = URL + "/issues";
-    if (time != undefined) {
+    if (time !== undefined) {
         let datestring = convertUnixTime(time);
         urlRequest += "?since=" + datestring;
     }
@@ -129,23 +129,34 @@ var listPullRequests = function(time) {
  *       number: {issue or pull request object}
  *      }
  */
-var generatePullIssueObj = function() {
-    var pullIssueObj = {};
-    return Promise.all([listPullRequests(), listIssues()])
-        .then(function(results) {
-            for(var i = 0; i < results[0].length; i++) {
-                //this should create timestamp property from creation date
-                results[0][i]["ts"] = results[0][i]["updated_at"] / 1000;
-                pullIssueObj[results[0][i]["number"]] = results[0][i];
+var generatePullIssueObj = function(pullIssueObj={}){
+    let lastCheck = "";
+    let time;
+    if (Object.keys(pullIssueObj).length !== 0){
+        Object.values(pullIssueObj).forEach(function(entry){
+            if (entry["updated_at"] > lastCheck){
+                lastCheck = entry["updated_at"];
             }
-            for(var i = 0; i < results[1].length; i++) {
-                //this should create timestamp property from creation date
-                results[1][i]["ts"] = results[1][i]["updated_at"] / 1000;
-                pullIssueObj[results[1][i]["number"]] = results[1][i];
-            }
-        }).then(function(){
-            return pullIssueObj;
         });
+        if (lastCheck){
+            time = lastCheck;
+        }
+        return Promise.all([listPullRequests(time), listIssues(time)])
+            .then(function(results) {
+                for(let i = 0; i < results[0].length; i++) {
+                //this should create timestamp property from creation date
+                    results[0][i]["ts"] = results[0][i]["updated_at"] / 1000;
+                    pullIssueObj[results[0][i]["number"]] = results[0][i];
+                }
+                for(let i = 0; i < results[1].length; i++) {
+                //this should create timestamp property from creation date
+                    results[1][i]["ts"] = results[1][i]["updated_at"] / 1000;
+                    pullIssueObj[results[1][i]["number"]] = results[1][i];
+                }
+            }).then(function(){
+                return pullIssueObj;
+            });
+    }
 };
 
 // listPullRequests();
@@ -217,6 +228,7 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     return githubData;
 };
 let updateData = function updateData(latestSlackMessage){
+    githubData = generatePullIssueObj(githubData);
     watchedChannels.forEach(function(channel){
         let hasMore = true;
         while (hasMore){
@@ -226,8 +238,11 @@ let updateData = function updateData(latestSlackMessage){
                     if (data["hasMore"]){
                         latestSlackMessage = data["latest"];
                     }
-                    else{hasMore = false;}
+                    else{
+                        hasMore = false;
+                    }
                 });
         }
     });
+
 };
