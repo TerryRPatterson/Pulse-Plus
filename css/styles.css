@@ -20,6 +20,11 @@ header {
     height:40px;
 }
 
+.fa-code-branch {
+    font-size: 1.5em;
+    transform: rotate(180deg) scaleX(-1) translate(0px, -2px);
+}
+
 li span {
     font-style: oblique;
 }
@@ -137,18 +142,18 @@ strong {
     }
 
     .issues {
-        height: 400px;
+        height: 45vh;
         overflow: scroll;
     }
 
     .pulls {
-        height: 400px;
+        height: 45vh;
         overflow: scroll;
     }
 
     .feed {
         grid-area: feed;
-        height:200px;
+        height:43vh;
         overflow: scroll;
     }
 }
