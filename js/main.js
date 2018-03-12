@@ -4,12 +4,13 @@
 no-unused-vars:0 */
 /* github functionality */
 const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
-const GITHUB_TOKEN = "f75e64d4f8afbb6c3187e38a648b71cecbf01a74";
+const GITHUB_TOKEN = "2f4684e0fc4b1fd2903002484b4c29dcdb5577b5";
 
 let githubData = {};
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
 /**
- * Function creates a Date object from an Unix time stamp.
+ * Function creates a Date object from an Unix time stamp. In order to 
+ * present human readable form of time.
  * @param {int} timestamp - An Unix time stamp.
  * @return {string} The current time.
  */
