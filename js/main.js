@@ -263,7 +263,7 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     return githubData;
 };
 
-let updateData = function updateData(latestSlackMessage){
+let updateData = function updateData(timestamp){
     githubData = generatePullIssueObj(githubData);
     let callback = function(data){
         githubData = parseSlackData(data["messages"],githubData);
@@ -274,9 +274,12 @@ let updateData = function updateData(latestSlackMessage){
         return data;
     };
     watchedChannels.forEach(function(channel){
+        let recivedData = slack("ListMessages",{"channel":channel, "time":timestamp},callback);
         let hasMore = true;
-        slackMessages = slackMessages.concat(slack("ListMessages",
-            {"channel":channel, "time":latestSlackMessage},callback)["messages"]);
+        if (latestSlackMessage < recivedData["latest"]){
+            latestSlackMessage = recivedData["latest"];
+        }
+        slackMessages = slackMessages.concat(recivedData["messages"]);
     });
 
 };
