@@ -5,18 +5,25 @@ var feed_panel = document.querySelector(".feed_icon");
 var issues = document.querySelector(".issues").classList;
 var pulls = document.querySelector(".pulls").classList;
 var feed = document.querySelector(".feed").classList;
+var messaging = document.querySelector(".messaging").classList;
 
 issues_panel.addEventListener("click", () => {
-    pulls.toggle("hidden");
-    feed.toggle("hidden");
+    issues.remove("hidden");
+    pulls.add("hidden");
+    feed.add("hidden");
+    messaging.add("hidden");
 });
 
 pulls_panel.addEventListener("click", () => {
-    issues.toggle("hidden");
-    feed.toggle("hidden");
+    pulls.remove("hidden");
+    issues.add("hidden");
+    feed.add("hidden");
+    messaging.add("hidden");
 });
 
 feed_panel.addEventListener("click", () => {
-    issues.toggle("hidden");
-    pulls.toggle("hidden");
+    messaging.remove("hidden");
+    feed.remove("hidden");
+    issues.add("hidden");
+    pulls.add("hidden");
 });

@@ -7,8 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.0/normalize.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-    <!-- <link rel="stylesheet" href="./css/bootstrap.css" /> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.css" />
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /> -->
     <link rel="stylesheet" href="./css/materialize.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="./css/styles.css" />
     <title>Pulse</title>
@@ -16,110 +18,133 @@
 
 <body>
     <header>
-        <nav>
-            <div class="nav-wrapper">
-                <a href="#!" class="brand-logo">Pulse</a>
-                <a href="#issues" class="issues_icon sidenav-trigger">
-                    <i class="large material-icons">priority_high</i>
-                </a>
-                <a href="#pulls" class="pulls_icon sidenav-trigger">
-                    <i class="large material-icons">code</i>
-                </a>
-                <a href="#feed" class="feed_icon sidenav-trigger">
-                    <i class="large material-icons">chat</i>
-                </a>
-                <a href="#!" class="update_icon sidenav-trigger">
-                    <i class="large material-icons">sync</i>
-                </a>
-                <a href="#!" class="settings_icon sidenav-trigger">
-                    <i class="large material-icons">settings</i>
-                </a>
-                <ul class="right hide-on-med-and-down">
-                    <li>
-                        <a href="sass.html">Issues</a>
-                    </li>
-                    <li>
-                        <a href="badges.html">Pull Requests</a>
-                    </li>
-                    <li>
-                        <a href="collapsible.html">Feed</a>
-                    </li>
-                    <li>
-                        <a href="mobile.html">Visualize</a>
-                    </li>
-                </ul>
-            </div>
+        <nav class="topnav">
+            <ul>
+                <li><i class="fab fa-github"></i> Pulse<span>Plus</span></li>
+            </ul>
         </nav>
-
-        <!-- <ul class="sidenav" id="mobile-demo">
-            <li>
-                <a href="sass.html">Sass</a>
-            </li>
-            <li>
-                <a href="badges.html">Components</a>
-            </li>
-            <li>
-                <a href="collapsible.html">Javascript</a>
-            </li>
-            <li>
-                <a href="mobile.html">Mobile</a>
-            </li>
-        </ul> -->
+        <nav class="bottomnav">
+            <ul>
+                <li class="logo"><i class="fab fa-github"></i> Pulse<span>Plus</span></li>
+                <li>
+                    <a href="#issues" class="issues_icon">
+                        <i class="large material-icons">priority_high</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#pulls" class="pulls_icon">
+                        <i class="fas fa-code-branch"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#slack" class="feed_icon">
+                        <i class="large material-icons">chat</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#!" class="update_icon">
+                        <i class="large material-icons">sync</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#!" class="settings_icon">
+                        <i class="large material-icons">settings</i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </header>
 
     <main>
         <div class="issues" id="issues">
             <strong>Issues</strong>
             <ul class="list">
-                <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <!-- bg-primary mb-3 text-white-->
+                <li>
+                    <div class="card blue-grey darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">Issue# 7</span>
+                            <p>Create displays for Data from APIs</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#">Open on GitHub</a>
+                            <a href="#">Inspect</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="card blue-grey darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">Issue# 9</span>
+                            <p>Create displays for Data from APIs</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#">Open on GitHub</a>
+                            <a href="#">Inspect</a>
+                        </div>
+                    </div>
+                </li>
                 <li class="item card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
         </div>
-        <div class="pulls" id="pulls">
+        <div class="pulls hidden" id="pulls">
             <strong>Pull Requests</strong>
             <ul class="list">
-                <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <!-- bg-primary mb-3 text-white-->
-                <li class="item card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="item card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li>
+                    <div class="card indigo">
+                        <div class="card-content white-text">
+                            <span class="card-title">Pull Request #1</span>
+                            <p>Lorem ipsum foo bar</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#">Open on GitHub</a>
+                            <a href="#">Inspect</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="card indigo">
+                        <div class="card-content white-text">
+                            <span class="card-title">Pull Request #2</span>
+                            <p>Lorem ipsum foo bar</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#">Open on GitHub</a>
+                            <a href="#">Inspect</a>
+                        </div>
+                    </div>
+                </li>
                 <li class="item card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
         </div>
-        <div class="feed" id="feed">
+        <div class="feed hidden" id="feed">
             <strong>Feed</strong>
             <ul class="feedList">
-                <li class="feedItem card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <!-- bg-primary mb-3 text-white-->
-                <li class="feedItem card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="feedItem card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="feedItem card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="feedItem card">Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="feedItem card">Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="feedItem card">Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
-                <li class="feedItem card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-github"></i>Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-github"></i>Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Lorem dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Ipsum dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-github"></i>Foo dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
+                <li class="feedItem card"><i class="fab fa-slack-hash"></i>Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
-        </div>
-        <div class="input-field col s6">
-            <input placeholder="Placeholder" id="first_name" type="text" class="validate">
-            <label for="first_name">Post to Slack</label>
-            <button class="btn waves-effect waves-light" type="submit" name="action">
-                <i class="fab fa-slack-hash"></i>Post to Slack
-            </button>
         </div>
     </main>
     <footer>
-
+        <div class="input-field col s6 messaging hidden">
+            <input placeholder="Message" id="slack_msg" type="text" class="validate">
+            <label for="slack_msg">Post to Slack</label>
+            <button class="btn slack waves-effect waves-light" id="slack" type="submit" name="action">
+                <i class="fab fa-slack-hash"></i> Post to
+                <span>Slack</span>
+            </button>
+        </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="./js/materialize.js"></script>
@@ -127,5 +152,4 @@
     <script src="./js/main.js"></script>
     <script src="./js/page_function.js"></script>
 </body>
-
 </html>
