@@ -238,22 +238,18 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     return githubData;
 };
 
-let updateData = function updateData(latestSlackMessage){
+let updateData = function updateData(timestamp){
     githubData = generatePullIssueObj(githubData);
+    let callback = function(data){
+        githubData = parseSlackData(data["messages"],githubData);
+        if (data["hasMore"]){
+            slack("ListMessages",{"channel":channel, "time":data["latest"]},callback);
+        }
+        return data;
+    };
     watchedChannels.forEach(function(channel){
         let hasMore = true;
-        while (hasMore){
-            slack("ListMessages",{"channel":channel, "time":latestSlackMessage})
-                .then(function(data){
-                    githubData = parseSlackData(data["messages"],githubData);
-                    if (data["hasMore"]){
-                        latestSlackMessage = data["latest"];
-                    }
-                    else{
-                        hasMore = false;
-                    }
-                });
-        }
+        return slack("ListMessages",{"channel":channel, "time":timestamp},callback)["latest"];
     });
 
 };
@@ -315,3 +311,13 @@ var populatePullList = function() {
 
 populateIssueList();
 populatePullList();
+
+let refreshFunctions = function refreshFunctions(){
+    let latestSlackMessage;
+    Document.querySelector(".update_icon").addEventListener(function(event){
+        latestSlackMessage = updateData(latestSlackMessage);
+    });
+    setInterval(5000,function(){
+        latestSlackMessage = updateData(latestSlackMessage);
+    });
+};
