@@ -4,7 +4,7 @@
 no-unused-vars:0 */
 /* github functionality */
 const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
-const GITHUB_TOKEN = "2f4684e0fc4b1fd2903002484b4c29dcdb5577b5";
+const GITHUB_TOKEN = "247b55f6e66dd99507bbab946d5016846ee06b21";
 
 let githubData = {};
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
@@ -42,7 +42,7 @@ var getRateLimit = function() {
         });
 };
 
-// getRateLimit();
+ getRateLimit();
 
 /**
  * Function retrieves and displays information about contributors on this
