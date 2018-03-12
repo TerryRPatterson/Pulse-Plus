@@ -4,6 +4,8 @@
 no-unused-vars:0 */
 /* github functionality */
 const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
+const GITHUB_TOKEN = "f75e64d4f8afbb6c3187e38a648b71cecbf01a74";
+
 let githubData = {};
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
 /**
@@ -21,7 +23,11 @@ var convertUnixTime = function(timestamp) {
  */
 var getRateLimit = function() {
     var urlRequest = "https://api.github.com/rate_limit";
-    fetch(urlRequest)
+    fetch(urlRequest, {
+        headers: {
+            authorization: "token " + GITHUB_TOKEN
+        }
+    })
         .then(function(response) {
             return response.json();
         })
@@ -44,7 +50,11 @@ var getRateLimit = function() {
 var listContributors = function() {
     var urlRequest = URL + "/stats/contributors";
     // fetch returns array of json objects
-    fetch(urlRequest)
+    fetch(urlRequest, {
+        headers: {
+            authorization: "token " + GITHUB_TOKEN
+        }
+    })
         .then(function(response) {
             return response.json();
         })
@@ -73,7 +83,11 @@ var listIssues = function(time) {
         urlRequest += "?since=" + datestring;
     }
     // fetch returns array of json objects
-    return fetch(urlRequest)
+    return fetch(urlRequest, {
+        headers: {
+            authorization: "token " + GITHUB_TOKEN
+        }
+    })
         .then(function(response) {
             return response.json();
         });
@@ -98,7 +112,11 @@ var listIssues = function() {
 var listCommits = function() {
     var urlRequest = URL + "/commits";
     // fetch returns array of json objects
-    fetch(urlRequest)
+    fetch(urlRequest, {
+        headers: {
+            authorization: "token " + GITHUB_TOKEN
+        }
+    })
         .then(function(response) {
             return response.json();
         })
@@ -127,7 +145,11 @@ var listPullRequests = function(time) {
         urlRequest += "?since=" + datestring;
     }
     // fetch returns array of json objects
-    return fetch(urlRequest)
+    return fetch(urlRequest, {
+        headers: {
+            authorization: "token " + GITHUB_TOKEN
+        }
+    })
         .then(function(response) {
             return response.json();
         });
@@ -279,8 +301,8 @@ var makeIssueListItem = function(issue) {
 var makePullListItem = function(pullRequest) {
     var $issueList = $("#pulls ul");
     var $issueElement = $("<li>").addClass("item card");
-    $issueElement.attr("id", issue.number);
-    $issueElement.text("Issue# " + issue.number + " " + issue.title);
+    $issueElement.attr("id", pullRequest.number);
+    $issueElement.text("Pull Request# " + pullRequest.number + " " + pullRequest.title);
     $issueList.append($issueElement);
 };
 
