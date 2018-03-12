@@ -80,7 +80,13 @@ main {
     margin-top: 15px;
 }
 
-.item {
+.ghfeed {
+    margin: 10px auto;
+    width: 90vw;
+    text-align: center;
+}
+
+.item {  /* can be removed after card update */
     color: white;
     background-color: #19A79A;
     width:95%;
@@ -102,6 +108,7 @@ main {
     border: none;
     box-shadow: none;
     padding: 10px 0px 0px 20px;
+    font-family: 'Lato', Arial, Helvetica, sans-serif;
 }
 
 .slack {
@@ -127,13 +134,14 @@ button > span {
 
 strong {
     display: fixed;
+    position: sticky;
     font-size: 1.5em;
-    z-index:2;
+    z-index: 2;
     margin: 10px 0px 10px 20px;
     padding: 40px 0px 40px 0px;
 }
 
-@media (max-width: 599px) {
+@media (max-width: 574px) {
     .logo {
         display: none;
     }
@@ -147,7 +155,7 @@ strong {
     }
 }
 
-@media (min-width: 600px) {
+@media (min-width: 575px) {
     .fa-code-branch {
     transform: rotate(180deg) scaleX(-1);
     }
@@ -194,6 +202,7 @@ strong {
         grid-area: feed;
         height:250px;
         width: 95vw;
+        max-width: 1172px;
         /* height: calc(50vh-64px); */
         overflow: scroll;
         margin: 0 auto;
@@ -206,5 +215,12 @@ strong {
     .input-field {
         width: 95vw;
         margin: 15px auto 14px;
+    }
+
+    .ghfeed {
+        /* margin: 10px auto; */
+        width: 45vw;
+        /* max-width: 475px; */
+        /* text-align: center; */
     }
 }
