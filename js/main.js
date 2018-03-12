@@ -4,7 +4,7 @@
 no-unused-vars:0 */
 /* github functionality */
 const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
-const GITHUB_TOKEN = "f75e64d4f8afbb6c3187e38a648b71cecbf01a74";
+const GITHUB_TOKEN = localStorage.getItem("GitToken");
 
 let githubData = {};
 let slackMessages = [];
@@ -224,15 +224,17 @@ let slack = function slack(method, options={},promiseCallback=function(data){ret
         payload["types"] = "public_channel,private_channel";
     }
     payload["token"] = localStorage["token"];
-    return $.ajax(url(method),{
+    let recivedData = $.ajax(url(method),{
         method:"POST",
         header:{
             "content-type":"application/x-www-form-urlencoded"
         },
         data:$.param(payload)
-    }).then(function(data){
+    });
+    recivedData.then(function(data){
         promiseCallback(data);
     });
+    return recivedData;
 };
 
 /*Only pass latest changes of slack messages
@@ -243,7 +245,6 @@ let parseSlackData = function parseSlackData(slackData, githubData){
         let text = message["text"];
         let matchedItem = regExpression.exec(text);
         while (matchedItem !== null){
-            console.log(githubData[matchedItem[1]]);
             if (githubData[matchedItem[1]] !== undefined){
                 if (githubData[matchedItem[1]]["slackMessages"] !==
                 undefined){
@@ -326,30 +327,33 @@ let refreshFunctions = function refreshFunctions(){
         let callback = function(data){
             githubData = parseSlackData(data["messages"],githubData);
             if (data["hasMore"]){
-                slackMessages = slackMessages.concat(slack("ListMessages",{
-                    "channel":channel, "time":data["latest"]},callback)["messages"]);
+                slack("ListMessages",{"channel":channel, "time":data["latest"]},
+                    callback).then(function(data){
+                    slackMessages = slackMessages.concat(data["messages"]);
+                });
             }
-            return data;
         };
         watchedChannels.forEach(function(channel){
-            let recivedData = slack("ListMessages",{"channel":channel, "time":timestamp},callback);
-            let hasMore = true;
-            if (latestSlackMessage < recivedData["latest"]){
-                latestSlackMessage = recivedData["latest"];
-            }
-            slackMessages = slackMessages.concat(recivedData["messages"]);
+            slack("ListMessages",{"channel":channel, "time":timestamp},callback)
+                .then(function(data){
+                    if (latestSlackMessage < data["latest"]){
+                        latestSlackMessage = data["latest"];
+                    }
+                    slackMessages = slackMessages.concat(data["messages"]);
+                });
         });
 
     };
     let latestSlackMessage;
-    Document.querySelector(".update_icon").addEventListener(function(event){
+    document.querySelector(".update_icon").addEventListener("click",function(event){
         latestSlackMessage = updateData(latestSlackMessage);
     });
-    setInterval(5000,function(){
+    setInterval(function(){
         latestSlackMessage = updateData(latestSlackMessage);
-    });
+    },5000);
 };
 let feedUpdate = function feedUpdate(messages){
+    let feed = document.querySelector("#feed");
     messages.sort(function(a,b){
         if (a.ts < b.ts){
             return -1;
@@ -367,12 +371,23 @@ let feedUpdate = function feedUpdate(messages){
     messages.forEach(function(messageObject){
         let container = document.createElement("li");
         let image = document.createElement("img");
-        image.classList.add(".icon");
-        if (messageObject["service"] === "slack"){
-            image["src"] = "Slack_Icon.png";
+        let mainText = document.createElement("p");
+        let timestamp = document.createElement("aside");
+        image.classList.add("icon");
+        if (messageObject["service"] === undefined){
+            image.setAttribute("src","Slack_Icon.png");
+            mainText.textContent = `User: ${messageObject["user"]} Message: ` +
+                                    `${messageObject["text"]} \n` ;
         }
+        timestamp.textContent = `${convertUnixTime(messageObject["ts"])}`;
+        timestamp.classList.add("timestamp");
+        container.appendChild(image);
+        container.appendChild(mainText);
+        container.appendChild(timestamp);
+        container.classList.add("feedItem", "card");
+        feed.appendChild(container);
 
-        container.classList.add("feedItem card");
     });
 
 };
+refreshFunctions();
