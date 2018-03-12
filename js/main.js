@@ -268,13 +268,15 @@ let updateData = function updateData(latestSlackMessage){
     let callback = function(data){
         githubData = parseSlackData(data["messages"],githubData);
         if (data["hasMore"]){
-            slack("ListMessages",{"channel":channel, "time":data["latest"]},callback);
+            slackMessages = slackMessages.concat(slack("ListMessages",{
+                "channel":channel, "time":data["latest"]},callback)["messages"]);
         }
         return data;
     };
     watchedChannels.forEach(function(channel){
         let hasMore = true;
-        slack("ListMessages",{"channel":channel, "time":latestSlackMessage},callback);
+        slackMessages = slackMessages.concat(slack("ListMessages",
+            {"channel":channel, "time":latestSlackMessage},callback)["messages"]);
     });
 
 };
