@@ -100,11 +100,13 @@ main {
 }
 
 .slack {
-    text-transform: lowercase;
+    font-family: 'Lato', Arial, Helvetica, sans-serif;
+    text-transform: none;
 }
 
-.slack:first-letter {
-    text-transform: capitalize;
+button > span {
+    font-weight: 800;
+    font-style: none;
 }
 
 strong {
