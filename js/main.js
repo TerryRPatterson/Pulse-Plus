@@ -7,6 +7,7 @@ const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
 const GITHUB_TOKEN = "f75e64d4f8afbb6c3187e38a648b71cecbf01a74";
 
 let githubData = {};
+let slackMessages = [];
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
 /**
  * Function creates a Date object from an Unix time stamp.
@@ -204,7 +205,7 @@ let url = function url(method){
     return url+methods[method];
 };
 //takes method from method object, and an object contaning all options selected
-let slack = function slack(method, options={},promiseCallback){
+let slack = function slack(method, options={},promiseCallback=function(data){return data;}){
     //channel, asUser, text, oldest
     let payload = {};
     if (options["channel"]){
