@@ -178,22 +178,29 @@ strong {
     }
 
     .issues {
+        display: block;
         height: 45vh;
         overflow: scroll;
     }
 
     .pulls {
+        display: block;
         height: 45vh;
         overflow: scroll;
     }
 
     .feed {
+        display: block;
         grid-area: feed;
         height:250px;
         width: 95vw;
         /* height: calc(50vh-64px); */
         overflow: scroll;
         margin: 0 auto;
+    }
+
+    .messaging {
+        display: block;
     }
 
     .input-field {
