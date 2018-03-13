@@ -312,6 +312,7 @@ var makePullListItem = function(pullRequest) {
     var $aInspect = $("<a>");
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
+    $aHrefGithub.attr("target","_blank");
 
     $actionCardDiv.append($aHrefGithub).append($aInspect);
     $para.text(pullRequest.title);
@@ -452,9 +453,6 @@ let sortByTime = function sortByTime(messages){
 let feedUpdate = function feedUpdate(messages){
     if (messages.length > 0){
         let feed = document.querySelector("#feed");
-        while(feed.lastChild){
-            feed.removeChild(feed.lastChild);
-        }
         sortByTime(messages);
         messages.forEach(function(messageObject){
             let container = document.createElement("li");
