@@ -354,7 +354,6 @@ populatePullList();
 
 let refreshFunctions = function refreshFunctions(){
     let latestSlackMessage = 0;
-
     let updateAllChannels = function updateAllChannels(timestamp){
         let promises = [];
         watchedChannels.forEach(function(channel){
@@ -412,6 +411,17 @@ let refreshFunctions = function refreshFunctions(){
     document.querySelector(".update_icon").addEventListener("click",function(event){
         updateAllChannels(latestSlackMessage).then(function(data){
             feedUpdate(data);
+        });
+    });
+    document.querySelector("#slackPost").addEventListener("submit",function(event){
+        let form = document.querySelector("#slackPost");
+        let textField = form.querySelector("#slack_msg");
+        slack("postMessage",{"text":textField["value"], "channel":"C9K0QKN3T",
+            "asUser":true}).then(function(){
+            updateAllChannels(latestSlackMessage).then(feedUpdate).then(
+                function(){
+                    form.reset();
+                });
         });
     });
     //setInterval(function(){
