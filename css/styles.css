@@ -1,3 +1,13 @@
+.icon {
+    display: inline;
+    width: 20px;
+    height: 20px;
+}
+
+.timestamp{
+    font-size: 10px;
+}
+
 header {
     position: fixed;
     z-index: 100;
@@ -114,7 +124,7 @@ main {
 .slack {
     font-family: 'Lato', Arial, Helvetica, sans-serif;
     text-transform: none;
-    height: 5vh;
+    height: 35px;
 }
 
 footer {
@@ -217,17 +227,6 @@ strong {
         margin: 15px auto 14px;
     }
 
-}
-.icon {
-    display: inline;
-    width: 20px;
-    height: 20px;
-}
-.timestamp{
-    font-size: 10px;
-}
-
-
     .ghfeed {
         /* margin: 10px auto; */
         width: 45vw;
@@ -235,4 +234,3 @@ strong {
         /* text-align: center; */
     }
 }
-
