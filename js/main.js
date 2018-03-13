@@ -277,9 +277,22 @@ let parseSlackData = function parseSlackData(slackData, githubData){
  */
 var makeIssueListItem = function(issue) {
     var $issueList = $("#issues ul");
-    var $issueElement = $("<li>").addClass("item card");
-    $issueElement.attr("id", issue.number);
-    $issueElement.text("Issue# " + issue.number + " " + issue.title);
+    var $issueElement = $("<li>");
+    var $outerDiv = $("<div>").addClass("card ghfeed blue-grey darken-1");
+    var $titleCardDiv = $("<div>").addClass("card-content white-text");
+    var $actionCardDiv = $("<div>").addClass("card-action");
+    var $span = $("<span>").addClass("card-title").text("Issue# " + issue.number);
+    var $para = $("<p>");
+    var $aHrefGithub = $("<a>");
+    var $aInspect = $("<a>");
+    $aInspect.attr("href", "#").text("Inspect");
+    $aHrefGithub.attr("href", issue.html_url).text("Open on GitHub");
+
+    $actionCardDiv.append($aHrefGithub).append($aInspect);
+    $para.text(issue.title);
+    $titleCardDiv.append($span).append($para);
+    $outerDiv.append($titleCardDiv).append($actionCardDiv);
+    $issueElement.append($outerDiv);
     $issueList.append($issueElement);
 };
 
@@ -288,11 +301,24 @@ var makeIssueListItem = function(issue) {
  * @param {object} pullRequest - An pull request object from GitHub.
  */
 var makePullListItem = function(pullRequest) {
-    var $issueList = $("#pulls ul");
-    var $issueElement = $("<li>").addClass("item card");
-    $issueElement.attr("id", pullRequest.number);
-    $issueElement.text("Pull Request# " + pullRequest.number + " " + pullRequest.title);
-    $issueList.append($issueElement);
+    var $pullList = $("#pulls ul");
+    var $pullElement = $("<li>");
+    var $outerDiv = $("<div>").addClass("card ghfeed indigo");
+    var $titleCardDiv = $("<div>").addClass("card-content white-text");
+    var $actionCardDiv = $("<div>").addClass("card-action");
+    var $span = $("<span>").addClass("card-title").text("Pull Request# " + pullRequest.number);
+    var $para = $("<p>");
+    var $aHrefGithub = $("<a>");
+    var $aInspect = $("<a>");
+    $aInspect.attr("href", "#").text("Inspect");
+    $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
+
+    $actionCardDiv.append($aHrefGithub).append($aInspect);
+    $para.text(pullRequest.title);
+    $titleCardDiv.append($span).append($para);
+    $outerDiv.append($titleCardDiv).append($actionCardDiv);
+    $issueElement.append($outerDiv);
+    $pullList.append($pullElement);
 };
 
 /**
