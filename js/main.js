@@ -147,31 +147,33 @@ var listPullRequests = function(time) {
 };
 
 /**
- * Function returns an array of objects with two properties, author and 
+ * Function returns an array of objects with two properties, author and
  * message.
  */
 var getPullIssueComments = function(commentUrl) {
     var urlRequest = commentUrl;
     // fetch returns array of json objects
-    var comments = []
+    var comments = [];
     // fetch returns array of json objects
     return fetch(urlRequest, {
-                headers: {
-                    authorization: "token " + GITHUB_TOKEN
-                }
-        })
+        headers: {
+            authorization: "token " + GITHUB_TOKEN
+        }
+    })
         .then(function(response) {
             var jsonArray = response.json();
             return jsonArray;
         })
         .then(function(jsonArray) {
+            //console.log(jsonArray);
             for (var i = 0; i < jsonArray.length; i++) {
                 var tuple = {};
                 tuple["author"] = jsonArray[i].user.login;
                 tuple["message"] = jsonArray[i].body;
+                tuple["ts"] = Date.parse(jsonArray[i].updated_at) / 1000;
                 comments.push(tuple);
             }
-            //console.log(comments);
+            console.log(comments);
             return comments;
         });
 };
@@ -184,7 +186,7 @@ var getPullIssueComments = function(commentUrl) {
  *       number: {issue or pull request object}
  *       ts : timestamp
  *       type: pull or issue
- *       comments: [ 
+ *       comments: [
  *                  {},
  *                  {},
  *                 ]
@@ -206,27 +208,32 @@ var generatePullIssueObj = function(pullIssueObj={}){
     return Promise.all([listPullRequests(time), listIssues(time)])
         .then(function(results) {
             console.log(results);
+            var pullNumbers = [];
             for(let i = 0; i < results[0].length; i++) {
-            //this should create timestamp property from updated date
-                pullIssueObj[results[0]["number"]] = results[0][i];
-                pullIssueObj[results[0]["number"]]["type"] = "pull";
-                pullIssueObj[results[0]["number"]]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
+                //this should create timestamp property from updated date
+                pullIssueObj[results[0][i]["number"]] = results[0][i];
+                pullIssueObj[results[0][i]["number"]]["type"] = "pull";
+                pullIssueObj[results[0][i]["number"]]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
                 getPullIssueComments(results[0][i]["comments_url"])
                 .then(function (result) {
                     pullIssueObj[results[0][i]["number"]]["comments"] = result;
                 });
+                pullNumbers.push(results[0][i]["number"]);
             }
             for(let i = 0; i < results[1].length; i++) {
-            //this should create timestamp property from update date
-                pullIssueObj[results[1][i]["number"]] = results[1][i];
-                pullIssueObj[results[1][i]["number"]]["type"] = "issue";
-                pullIssueObj[results[1][i]["number"]]["ts"] = Date.parse(results[1][i]["updated_at"]) / 1000;
-                getPullIssueComments(results[1][i]["comments_url"])
-                .then(function (result) {
-                    pullIssueObj[results[1][i]["number"]]["comments"] = result;
-                });
+                //this should create timestamp property from update date
+                if (pullNumbers.includes(results[1][i]["number"]) != true) {
+                    pullIssueObj[results[1][i]["number"]] = results[1][i];
+                    pullIssueObj[results[1][i]["number"]]["type"] = "issue";
+                    pullIssueObj[results[1][i]["number"]]["ts"] = Date.parse(results[1][i]["updated_at"]) / 1000;
+                    getPullIssueComments(results[1][i]["comments_url"])
+                    .then(function (result) {
+                        pullIssueObj[results[1][i]["number"]]["comments"] = result;
+                    });
+                }
             }
         }).then(function(){
+            console.log(pullIssueObj);
             return pullIssueObj;
         });
 };
@@ -318,7 +325,7 @@ var makeIssueListItem = function(issue) {
     var $span = $("<span>").addClass("card-title").text("Issue# " + issue.number);
     var $para = $("<p>");
     var $aHrefGithub = $("<a>");
-    var $aInspect = $("<a>");
+    var $aInspect = $("<a>").addClass("open_modal");
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", issue.html_url).attr("target","_blank").text("Open on GitHub");
 
@@ -343,7 +350,7 @@ var makePullListItem = function(pullRequest) {
     var $span = $("<span>").addClass("card-title").text("Pull Request# " + pullRequest.number);
     var $para = $("<p>");
     var $aHrefGithub = $("<a>");
-    var $aInspect = $("<a>");
+    var $aInspect = $("<a>").addClass("open_modal");
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
     $aHrefGithub.attr("target","_blank");
@@ -385,11 +392,24 @@ var populatePullList = function() {
     });
 };
 
-populateIssueList();
-populatePullList();
 
 let refreshFunctions = function refreshFunctions(){
     let latestSlackMessage = 0;
+    let refresh = function refresh(){
+        return generatePullIssueObj(githubData).then(function(data){
+            console.log("refresh ran");
+            console.log(data);
+            populatePullList();
+            populateIssueList();
+            let messages = [];
+            githubData = data;
+            messages.push(createGitHubList(githubData));
+            updateAllChannels(latestSlackMessage).then(function(slackMessages){
+                messages.push(slackMessages);
+                return (messages);
+            });
+        }).then(feedUpdate);
+    };
     let updateAllChannels = function updateAllChannels(timestamp){
         let promises = [];
         watchedChannels.forEach(function(channel){
@@ -402,7 +422,6 @@ let refreshFunctions = function refreshFunctions(){
                     combinedMessages.push(message);
                 });
             });
-            console.log(combinedMessages);
             return combinedMessages;
         });
 
@@ -426,7 +445,6 @@ let refreshFunctions = function refreshFunctions(){
             }
         };
         return new Promise(function(resolve){
-            githubData = generatePullIssueObj(githubData);
             slack("ListMessages",{"channel":channel, "time":timestamp},callback)
                 .then(function(data){
                     if (data["messages"].length > 0){
@@ -448,25 +466,22 @@ let refreshFunctions = function refreshFunctions(){
         });
     };
     document.querySelector(".update_icon").addEventListener("click",function(event){
-        updateAllChannels(latestSlackMessage).then(function(data){
-            feedUpdate(data);
-        });
+        refresh();
     });
     document.querySelector("#slackPost").addEventListener("submit",function(event){
         let form = document.querySelector("#slackPost");
         let textField = form.querySelector("#slack_msg");
         slack("postMessage",{"text":textField["value"], "channel":"C9K0QKN3T",
             "asUser":true}).then(function(){
-            updateAllChannels(latestSlackMessage).then(feedUpdate).then(
-                function(){
-                    form.reset();
-                });
+            refresh().then( function(){
+                form.reset();
+            });
         });
     });
     //setInterval(function(){
     //updateAllChannels(latestSlackMessage).then(feedUpdate);
     //},5000);
-    updateAllChannels(latestSlackMessage).then(feedUpdate);
+    refresh();
 };
 let sortByTime = function sortByTime(messages){
     messages.sort(function(a,b){
@@ -486,6 +501,7 @@ let sortByTime = function sortByTime(messages){
 };
 let feedUpdate = function feedUpdate(messages){
     if (messages.length > 0){
+        console.log(messages);
         let feed = document.querySelector("#feed");
         sortByTime(messages);
         messages.forEach(function(messageObject){
@@ -494,10 +510,20 @@ let feedUpdate = function feedUpdate(messages){
             let mainText = document.createElement("p");
             let timestamp = document.createElement("aside");
             image.classList.add("icon");
-            if (messageObject["service"] === undefined){
+            if (messageObject["type"] === "slack"){
                 image.setAttribute("src","Slack_Icon.png");
                 mainText.textContent = `User: ${messageObject["user"]} Message: ` +
                                         `${messageObject["text"]} \n` ;
+            }
+            if (messageObject["type"] === "pull"){
+                image.setAttribute("src","Git_Merge_Icon.png");
+                mainText.textContent = `User ${messageObject["author"]} title: `+
+                                        `${messageObject["title"]} \n`;
+            }
+            if (messageObject["type"] === "issue"){
+                image.setAttribute("src","Git_Issuse_Icon.png");
+                mainText.textContent = `User ${messageObject["author"]} title: `+
+                                        `${messageObject["title"]} \n`;
             }
             timestamp.textContent = `${convertUnixTime(messageObject["ts"])}`;
             timestamp.classList.add("timestamp");
@@ -506,8 +532,24 @@ let feedUpdate = function feedUpdate(messages){
             container.appendChild(timestamp);
             container.classList.add("feedItem", "card");
             feed.appendChild(container);
-
+            var objDiv = document.getElementById("feedContainer");
+            objDiv.scrollTop = objDiv.scrollHeight;
         });
     }
+};
+let createGitHubList = function createGitHubList(githubData){
+    let messages = [];
+    Object.keys(githubData).forEach(function(key){
+        let gitObject = githubData[key];
+        if (gitObject["comments"].length > 0){
+            let comments = gitObject["comments"];
+            comments.forEach(function(comment){
+                comment["type"] = "comment";
+                messages.push(comment);
+            });
+        }
+        messages.push(gitObject);
+    });
+    return messages;
 };
 refreshFunctions();
