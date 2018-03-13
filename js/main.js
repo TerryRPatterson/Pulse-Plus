@@ -222,7 +222,6 @@ let slack = function slack(method, options={},promiseCallback=function(data){ret
     if (options["text"]){
         payload["text"] = options["text"];
     }
-    console.log(options["time"]);
     if (Number.isInteger(parseInt(options["time"]))){
         console.log(parseFloat(options["time"]));
         payload["oldest"] = parseFloat(options["time"]);
@@ -354,7 +353,6 @@ let refreshFunctions = function refreshFunctions(){
                         sortByTime(data["messages"]);
                         let numberOfMessages = data["messages"].length-1;
                         let lastReceived = data["messages"][numberOfMessages]["ts"];
-                        console.log(data);
                         if (latestSlackMessage < lastReceived){
                             latestSlackMessage = lastReceived;
                         }
@@ -373,9 +371,9 @@ let refreshFunctions = function refreshFunctions(){
     document.querySelector(".update_icon").addEventListener("click",function(event){
         updateData(latestSlackMessage).then(feedUpdate)
     });
-    setInterval(function(){
-        updateData(latestSlackMessage).then(feedUpdate);
-    },5000);
+    // setInterval(function(){
+    //     updateData(latestSlackMessage).then(feedUpdate);
+    // },5000);
     updateData(latestSlackMessage).then(feedUpdate);
 };
 let sortByTime = function sortByTime(messages){
