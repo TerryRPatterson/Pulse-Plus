@@ -286,7 +286,7 @@ var makeIssueListItem = function(issue) {
     var $aHrefGithub = $("<a>");
     var $aInspect = $("<a>");
     $aInspect.attr("href", "#").text("Inspect");
-    $aHrefGithub.attr("href", issue.html_url).text("Open on GitHub");
+    $aHrefGithub.attr("href", issue.html_url).attr("target", "_blank").text("Open on GitHub");
 
     $actionCardDiv.append($aHrefGithub).append($aInspect);
     $para.text(issue.title);
@@ -311,7 +311,7 @@ var makePullListItem = function(pullRequest) {
     var $aHrefGithub = $("<a>");
     var $aInspect = $("<a>");
     $aInspect.attr("href", "#").text("Inspect");
-    $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
+    $aHrefGithub.attr("href", pullRequest.html_url).attr("target","_blank").text("Open on GitHub");
 
     $actionCardDiv.append($aHrefGithub).append($aInspect);
     $para.text(pullRequest.title);
