@@ -86,9 +86,12 @@ main {
 
 }
 
+/* .lightboxtoggle {
+    background-color: rgba(0,0,0,0.5);
+} */
+
 .modal {
     align-items: center;
-    background-color: rgba(0,0,0,0.5);
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -98,6 +101,19 @@ main {
     top: 0;
     width: 100vw;
     z-index: 101;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.fa-times-circle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: black;
+    font-size: 1.75em;
+}
+
+.modalhide {
+    visibility:hidden;
 }
 
 .feed {

@@ -16,7 +16,7 @@
     <title>Pulse</title>
 </head>
 
-<body>
+<body class="lightboxtoggle">
     <header>
         <nav class="topnav">
             <ul>
@@ -117,9 +117,11 @@
         </div>
         <div class="spacer"></div>
         <div class="modal">
-            <div class="lightbox card">
+            <div class="card">
+                <i class="far fa-times-circle"></i>
                 <div class="card-content">
-                    <p>Lorem Ipsum Foo Bar.</p>
+                    <h3>Issue #7</h3>
+                    <p>Foo bar. Lorem ipsum foo bar. Foo bar. Lorem ipsum foo bar. Foo bar. Lorem ipsum foo bar.</p>
                 </div>
                 <div class="card-tabs">
                     <ul class="tabs tabs-fixed-width">
@@ -135,9 +137,10 @@
                     </ul>
                 </div>
                 <div class="card-content grey lighten-4">
-                    <div id="test4">Test 1</div>
-                    <div id="test5">Test 2</div>
-                    <div id="test6">Test 3</div>
+                    <input placeholder="Comment" id="gh_msg" type="text" class="validate">
+                    <button class="btn ghcomment waves-effect waves-light" id="ghcomment" type="submit" name="action">
+                        <i class="fab fa-github"></i> Comment
+                    </button>
                 </div>
             </div>
         </div>
