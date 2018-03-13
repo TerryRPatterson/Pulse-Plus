@@ -7,7 +7,6 @@ const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
 const GITHUB_TOKEN = localStorage.getItem("GitToken");
 
 let githubData = {};
-let slackMessages = [];
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
 /**
  * Function creates a Date object from an Unix time stamp. In order to
@@ -354,53 +353,71 @@ populateIssueList();
 populatePullList();
 
 let refreshFunctions = function refreshFunctions(){
-    let updateData = function updateData(timestamp){
+    let latestSlackMessage = 0;
+
+    let updateAllChannels = function updateAllChannels(timestamp){
+        let promises = [];
+        watchedChannels.forEach(function(channel){
+            promises.push(updateChannel(channel,timestamp));
+        });
+        return Promise.all(promises).then(function(messageArrays){
+            let combinedMessages=[];
+            messageArrays.forEach(function(messages){
+                messages.forEach(function(message){
+                    combinedMessages.push(message);
+                });
+            });
+            return combinedMessages;
+        });
+
+    };
+    let updateChannel = function updateChannel(channel,timestamp){
+        let channelMessages = [];
+        let callback = function(data){
+            githubData = parseSlackData(data["messages"],githubData);
+            if (data["hasMore"]){
+                let numberOfMessages = data["messages"].length - 1;
+                let latest = data["messages"][numberOfMessages]["ts"];
+                slack("ListMessages",{"channel":channel, "time":latest},
+                    callback).then(function(data){
+                    channelMessages = channelMessages.concat(data["messages"]
+                        .map(function(message){
+                            message["type"] = "slack";
+                            return message;
+                        })
+                    );
+                });
+            }
+        };
         return new Promise(function(resolve){
             githubData = generatePullIssueObj(githubData);
-            let callback = function(data){
-                githubData = parseSlackData(data["messages"],githubData);
-                if (data["hasMore"]){
-                    let numberOfMessages = data["messages"].length - 1;
-                    let latest = data["messages"][numberOfMessages]["ts"];
-                    slack("ListMessages",{"channel":channel, "time":latest},
-                        callback).then(function(data){
-                        slackMessages = slackMessages.concat(data["messages"]
-                            .map(function(message){
-                                message["type"] = "slack";
-                                return message;
-                            })
-                        );
-                    });
-                }
-            };
-            watchedChannels.forEach(function(channel){
-                slack("ListMessages",{"channel":channel, "time":timestamp},callback)
-                    .then(function(data){
-                        sortByTime(data["messages"]);
-                        let numberOfMessages = data["messages"].length-1;
-                        let lastReceived = data["messages"][numberOfMessages]["ts"];
-                        if (latestSlackMessage < lastReceived){
-                            latestSlackMessage = lastReceived;
-                        }
-                        slackMessages = slackMessages.concat(data["messages"]
-                            .map(function(message){
-                                message["type"] = "slack";
-                                return message;
-                            })
-                        );
-                    });
-            });
-            resolve(slackMessages);
+            slack("ListMessages",{"channel":channel, "time":timestamp},callback)
+                .then(function(data){
+                    sortByTime(data["messages"]);
+                    let numberOfMessages = data["messages"].length-1;
+                    let lastReceived = data["messages"][numberOfMessages]["ts"];
+                    if (latestSlackMessage < lastReceived){
+                        latestSlackMessage = lastReceived;
+                    }
+                    channelMessages = channelMessages.concat(data["messages"]
+                        .map(function(message){
+                            message["type"] = "slack";
+                            return message;
+                        })
+                    );
+                    resolve(channelMessages);
+                });
         });
     };
-    let latestSlackMessage = 0;
     document.querySelector(".update_icon").addEventListener("click",function(event){
-        updateData(latestSlackMessage).then(feedUpdate);
+        updateAllChannels(latestSlackMessage).then(function(data){
+            feedUpdate(data);
+        });
     });
-    // setInterval(function(){
-    //     updateData(latestSlackMessage).then(feedUpdate);
-    // },5000);
-    updateData(latestSlackMessage).then(feedUpdate);
+    //setInterval(function(){
+        //updateAllChannels(latestSlackMessage).then(feedUpdate);
+    //},5000);
+    updateAllChannels(latestSlackMessage).then(feedUpdate);
 };
 let sortByTime = function sortByTime(messages){
     messages.sort(function(a,b){
