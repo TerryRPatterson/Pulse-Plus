@@ -312,6 +312,7 @@ var makePullListItem = function(pullRequest) {
     var $aInspect = $("<a>");
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
+    $aHrefGithub.attr("target","_blank");
 
     $actionCardDiv.append($aHrefGithub).append($aInspect);
     $para.text(pullRequest.title);
