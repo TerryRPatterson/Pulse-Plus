@@ -181,7 +181,7 @@ var generatePullIssueObj = function(pullIssueObj={}){
         .then(function(results) {
             for(let i = 0; i < results[0].length; i++) {
             //this should create timestamp property from updated date
-             pullIssueObj[results[0][i]['number']] = results[0][i];
+                pullIssueObj[results[0]["number"]] = results[0][i];
              pullIssueObj[results[0][i]['number']]["type"] = "pull";
              pullIssueObj[results[0][i]['number']]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
             }
@@ -367,6 +367,7 @@ let refreshFunctions = function refreshFunctions(){
                     combinedMessages.push(message);
                 });
             });
+            console.log(combinedMessages);
             return combinedMessages;
         });
 
@@ -393,18 +394,20 @@ let refreshFunctions = function refreshFunctions(){
             githubData = generatePullIssueObj(githubData);
             slack("ListMessages",{"channel":channel, "time":timestamp},callback)
                 .then(function(data){
-                    sortByTime(data["messages"]);
-                    let numberOfMessages = data["messages"].length-1;
-                    let lastReceived = data["messages"][numberOfMessages]["ts"];
-                    if (latestSlackMessage < lastReceived){
-                        latestSlackMessage = lastReceived;
+                    if (data["messages"].length > 0){
+                        sortByTime(data["messages"]);
+                        let numberOfMessages = data["messages"].length-1;
+                        let lastReceived = data["messages"][numberOfMessages]["ts"];
+                        if (latestSlackMessage < lastReceived){
+                            latestSlackMessage = lastReceived;
+                        }
+                        channelMessages = channelMessages.concat(data["messages"]
+                            .map(function(message){
+                                message["type"] = "slack";
+                                return message;
+                            })
+                        );
                     }
-                    channelMessages = channelMessages.concat(data["messages"]
-                        .map(function(message){
-                            message["type"] = "slack";
-                            return message;
-                        })
-                    );
                     resolve(channelMessages);
                 });
         });
@@ -436,31 +439,32 @@ let sortByTime = function sortByTime(messages){
     });
 };
 let feedUpdate = function feedUpdate(messages){
-    let feed = document.querySelector("#feed");
-    while(feed.lastChild){
-        feed.removeChild(feed.lastChild);
-    }
-    sortByTime(messages);
-    messages.forEach(function(messageObject){
-        let container = document.createElement("li");
-        let image = document.createElement("img");
-        let mainText = document.createElement("p");
-        let timestamp = document.createElement("aside");
-        image.classList.add("icon");
-        if (messageObject["service"] === undefined){
-            image.setAttribute("src","Slack_Icon.png");
-            mainText.textContent = `User: ${messageObject["user"]} Message: ` +
-                                    `${messageObject["text"]} \n` ;
+    if (messages.length > 0){
+        let feed = document.querySelector("#feed");
+        while(feed.lastChild){
+            feed.removeChild(feed.lastChild);
         }
-        timestamp.textContent = `${convertUnixTime(messageObject["ts"])}`;
-        timestamp.classList.add("timestamp");
-        container.appendChild(image);
-        container.appendChild(mainText);
-        container.appendChild(timestamp);
-        container.classList.add("feedItem", "card");
-        feed.appendChild(container);
+        sortByTime(messages);
+        messages.forEach(function(messageObject){
+            let container = document.createElement("li");
+            let image = document.createElement("img");
+            let mainText = document.createElement("p");
+            let timestamp = document.createElement("aside");
+            image.classList.add("icon");
+            if (messageObject["service"] === undefined){
+                image.setAttribute("src","Slack_Icon.png");
+                mainText.textContent = `User: ${messageObject["user"]} Message: ` +
+                                        `${messageObject["text"]} \n` ;
+            }
+            timestamp.textContent = `${convertUnixTime(messageObject["ts"])}`;
+            timestamp.classList.add("timestamp");
+            container.appendChild(image);
+            container.appendChild(mainText);
+            container.appendChild(timestamp);
+            container.classList.add("feedItem", "card");
+            feed.appendChild(container);
 
-    });
-
+        });
+    }
 };
 refreshFunctions();
