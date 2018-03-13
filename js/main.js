@@ -93,16 +93,6 @@ var listIssues = function(time) {
             return response.json();
         });
 };
-/*
-var listIssues = function() {
-    var urlRequest = URL + "/issues";
-    // fetch returns array of json objects
-    return fetch(urlRequest)
-        .then(function(response) {
-            return response.json();
-        });
-};
-*/
 
 // listIssues();
 
@@ -157,11 +147,47 @@ var listPullRequests = function(time) {
 };
 
 /**
+ * Function returns an array of objects with two properties, author and 
+ * message.
+ */
+var getPullIssueComments = function(commentUrl) {
+    var urlRequest = commentUrl;
+    // fetch returns array of json objects
+    var comments = []
+    // fetch returns array of json objects
+    return fetch(urlRequest, {
+                headers: {
+                    authorization: "token " + GITHUB_TOKEN
+                }
+        })
+        .then(function(response) {
+            var jsonArray = response.json();
+            return jsonArray;
+        })
+        .then(function(jsonArray) {
+            for (var i = 0; i < jsonArray.length; i++) {
+                var tuple = {};
+                tuple["author"] = jsonArray[i].user.login;
+                tuple["message"] = jsonArray[i].body;
+                comments.push(tuple);
+            }
+            //console.log(comments);
+            return comments;
+        });
+};
+
+
+
+/**
  * Function creates one big object containing all issues and pull requests.
  * form {
  *       number: {issue or pull request object}
  *       ts : timestamp
  *       type: pull or issue
+ *       comments: [ 
+ *                  {},
+ *                  {},
+ *                 ]
  *      }
  */
 var generatePullIssueObj = function(pullIssueObj={}){
@@ -179,17 +205,26 @@ var generatePullIssueObj = function(pullIssueObj={}){
     }
     return Promise.all([listPullRequests(time), listIssues(time)])
         .then(function(results) {
+            console.log(results);
             for(let i = 0; i < results[0].length; i++) {
             //this should create timestamp property from updated date
                 pullIssueObj[results[0]["number"]] = results[0][i];
                 pullIssueObj[results[0]["number"]]["type"] = "pull";
                 pullIssueObj[results[0]["number"]]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
+                getPullIssueComments(results[0][i]["comments_url"])
+                .then(function (result) {
+                    pullIssueObj[results[0][i]["number"]]["comments"] = result;
+                });
             }
             for(let i = 0; i < results[1].length; i++) {
             //this should create timestamp property from update date
                 pullIssueObj[results[1][i]["number"]] = results[1][i];
                 pullIssueObj[results[1][i]["number"]]["type"] = "issue";
                 pullIssueObj[results[1][i]["number"]]["ts"] = Date.parse(results[1][i]["updated_at"]) / 1000;
+                getPullIssueComments(results[1][i]["comments_url"])
+                .then(function (result) {
+                    pullIssueObj[results[1][i]["number"]]["comments"] = result;
+                });
             }
         }).then(function(){
             return pullIssueObj;
