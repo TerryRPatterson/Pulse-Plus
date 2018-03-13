@@ -181,15 +181,15 @@ var generatePullIssueObj = function(pullIssueObj={}){
         .then(function(results) {
             for(let i = 0; i < results[0].length; i++) {
             //this should create timestamp property from updated date
-             pullIssueObj[results[0][i]['number']] = results[0][i];
-             pullIssueObj[results[0][i]['number']]["type"] = "pull";
-             pullIssueObj[results[0][i]['number']]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
+                pullIssueObj[results[0]["number"]] = results[0][i];
+                pullIssueObj[results[0]["number"]]["type"] = "pull";
+                pullIssueObj[results[0]["number"]]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
             }
             for(let i = 0; i < results[1].length; i++) {
             //this should create timestamp property from update date
-                pullIssueObj[results[1][i]['number']] = results[1][i];
-                pullIssueObj[results[1][i]['number']]["type"] = "issue";
-                pullIssueObj[results[1][i]['number']]["ts"] = Date.parse(results[1][i]["updated_at"]) / 1000;
+                pullIssueObj[results[1][i]["number"]] = results[1][i];
+                pullIssueObj[results[1][i]["number"]]["type"] = "issue";
+                pullIssueObj[results[1][i]["number"]]["ts"] = Date.parse(results[1][i]["updated_at"]) / 1000;
             }
         }).then(function(){
             return pullIssueObj;
@@ -415,7 +415,7 @@ let refreshFunctions = function refreshFunctions(){
         });
     });
     //setInterval(function(){
-        //updateAllChannels(latestSlackMessage).then(feedUpdate);
+    //updateAllChannels(latestSlackMessage).then(feedUpdate);
     //},5000);
     updateAllChannels(latestSlackMessage).then(feedUpdate);
 };
