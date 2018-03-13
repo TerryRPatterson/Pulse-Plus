@@ -325,7 +325,7 @@ var makeIssueListItem = function(issue) {
     var $span = $("<span>").addClass("card-title").text("Issue# " + issue.number);
     var $para = $("<p>");
     var $aHrefGithub = $("<a>");
-    var $aInspect = $("<a>");
+    var $aInspect = $("<a>").addClass("open_modal");
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", issue.html_url).attr("target","_blank").text("Open on GitHub");
 
@@ -350,7 +350,7 @@ var makePullListItem = function(pullRequest) {
     var $span = $("<span>").addClass("card-title").text("Pull Request# " + pullRequest.number);
     var $para = $("<p>");
     var $aHrefGithub = $("<a>");
-    var $aInspect = $("<a>");
+    var $aInspect = $("<a>").addClass("open_modal");
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
     $aHrefGithub.attr("target","_blank");
@@ -513,7 +513,8 @@ let feedUpdate = function feedUpdate(messages){
             container.appendChild(timestamp);
             container.classList.add("feedItem", "card");
             feed.appendChild(container);
-
+            var objDiv = document.getElementById("feedContainer");
+            objDiv.scrollTop = objDiv.scrollHeight;
         });
     }
 };
