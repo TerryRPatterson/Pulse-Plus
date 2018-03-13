@@ -123,24 +123,20 @@
                     <h3>Issue #7</h3>
                     <p>Foo bar. Lorem ipsum foo bar. Foo bar. Lorem ipsum foo bar. Foo bar. Lorem ipsum foo bar.</p>
                 </div>
-                <div class="card-tabs">
-                    <ul class="tabs tabs-fixed-width">
-                        <li class="tab">
-                            <a href="#test4">Test 1</a>
-                        </li>
-                        <li class="tab">
-                            <a class="active" href="#test5">Test 2</a>
-                        </li>
-                        <li class="tab">
-                            <a href="#test6">Test 3</a>
-                        </li>
+                <div class="card-tabs commentthread">
+                    <ul class="">
+                        <li></li>
+                        <li></li>
+                        <li></li>
                     </ul>
                 </div>
                 <div class="card-content grey lighten-4">
-                    <input placeholder="Comment" id="gh_msg" type="text" class="validate">
-                    <button class="btn ghcomment waves-effect waves-light" id="ghcomment" type="submit" name="action">
-                        <i class="fab fa-github"></i> Comment
-                    </button>
+                    <form>
+                        <input placeholder="Comment" id="gh_msg" type="text" class="validate">
+                        <button class="btn ghcomment waves-effect waves-light" id="ghcomment" type="submit" name="action">
+                            <i class="fab fa-github"></i> Comment
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -166,12 +162,14 @@
     </main>
     <footer>
         <div class="input-field col s6 messaging hidden">
-            <input placeholder="Message" id="slack_msg" type="text" class="validate">
-            <label for="slack_msg">Post to Slack</label>
-            <button class="btn slack waves-effect waves-light" id="slack" type="submit" name="action">
-                <i class="fab fa-slack-hash"></i> Post to
-                <span>Slack</span>
-            </button>
+            <form>
+                <input placeholder="Message" id="slack_msg" type="text" class="validate">
+                <label for="slack_msg">Post to Slack</label>
+                <button class="btn slack waves-effect waves-light" id="slack" type="submit" name="action">
+                    <i class="fab fa-slack-hash"></i> Post to
+                    <span>Slack</span>
+                </button>
+            </form>
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
