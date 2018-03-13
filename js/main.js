@@ -286,6 +286,7 @@ var makeIssueListItem = function(issue) {
     var $aInspect = $("<a>");
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", issue.html_url).text("Open on GitHub");
+    $aHrefGithub.attr("target", "_blank");
 
     $actionCardDiv.append($aHrefGithub).append($aInspect);
     $para.text(issue.title);
