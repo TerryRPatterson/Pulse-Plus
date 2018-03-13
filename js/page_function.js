@@ -29,7 +29,7 @@ feed_panel.addEventListener("click", () => {
 });
 
 
-var closeX = document.querySelector(".close_modal");
+var closeModal = document.querySelector(".close_modal");
 var lightbox = document.querySelector('.lightbox').classList;
 
 var modalToggle = () => {
@@ -37,10 +37,14 @@ var modalToggle = () => {
     lightbox.toggle('modalhide');
 };
 
-closeX.addEventListener('click', modalToggle);
+closeModal.addEventListener('click', modalToggle);
 
 
 window.onload = function () {
     var objDiv = document.getElementById("feedContainer");
     objDiv.scrollTop = objDiv.scrollHeight;
 }
+
+var openModal = document.querySelector(".open_modal");
+
+openModal.addEventListener('click', modalToggle);
