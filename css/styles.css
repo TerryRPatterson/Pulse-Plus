@@ -80,6 +80,53 @@ main {
     overflow: scroll;
 }
 
+/* add styling for spacer class */
+
+.lightbox {
+
+}
+
+.modal {
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    left: 0;
+    overflow: auto;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 101;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.ghcomment {
+    float: right;
+    margin: 8px 0px 0px 10px; */
+}
+
+.ghopen, .ghcloseissue {
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.inputwrap {
+    overflow: hidden; 
+    padding-right: .5em;
+}
+
+.fa-times-circle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: black;
+    font-size: 1.75em;
+}
+
+.modalhide {
+    visibility:hidden;
+}
+
 .feed {
     grid-area: feed;
     overflow: scroll;

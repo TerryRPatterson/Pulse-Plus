@@ -54,7 +54,6 @@
             </ul>
         </nav>
     </header>
-
     <main>
         <div class="issues" id="issues">
             <!-- <header>Issues</header> -->
@@ -116,6 +115,41 @@
                 <li class="item ghfeed card">Bar dfgpojsdofbepodugbf sdojgbndosfbn [won osdjnonf</li>
             </ul>
         </div>
+        <div class="spacer"></div>
+        <div class="">
+            <div class="card">
+                <i class="far fa-times-circle"></i>
+                <div class="card-content">
+                    <h3>Issue #7</h3>
+                    <p>Foo bar. Lorem ipsum foo bar. Foo bar. Lorem ipsum foo bar. Foo bar. Lorem ipsum foo bar.</p>
+                </div>
+                <div class="card-tabs commentthread">
+                    <ul class="">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div class="card-content grey lighten-4">
+                    <form>
+                        <button class="btn ghcomment waves-effect waves-light" id="ghcomment" type="submit" name="action">
+                            <i class="fab fa-github"></i> Comment
+                        </button>
+                        <div class="inputwrap">
+                            <input placeholder="Comment" id="gh_msg" type="text" class="validate">
+                        </div>
+                        <div class=bottombtns>
+                            <button class="btn ghopen waves-effect waves-light" id="ghopen" type="submit" name="action">
+                                Open on GitHub
+                            </button>
+                            <button class="btn ghcloseissue waves-effect waves-light" id="ghcloseissue" type="submit" name="action">
+                                Close Issue
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="feed hidden" >
             <!-- <header>Feed</header> -->
             <ul class="feedList" id="feed">
@@ -124,12 +158,13 @@
     </main>
     <footer>
         <div class="input-field col s6 messaging hidden">
-            <input placeholder="Message" id="slack_msg" type="text" class="validate">
-            <label for="slack_msg">Post to Slack</label>
-            <button class="btn slack waves-effect waves-light" id="slack" type="submit" name="action">
-                <i class="fab fa-slack-hash"></i> Post to
-                <span>Slack</span>
-            </button>
+            <form>
+                <input placeholder="Message" id="slack_msg" type="text" class="validate">
+                <label for="slack_msg">Post to Slack</label>
+                <button class="btn slack waves-effect waves-light" id="slack" type="submit" name="action">
+                    <i class="fab fa-slack-hash"></i> Post to <span>Slack</span>
+                </button>
+            </form>
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
