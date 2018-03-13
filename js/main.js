@@ -207,17 +207,17 @@ var generatePullIssueObj = function(pullIssueObj={}){
     }
     return Promise.all([listPullRequests(time), listIssues(time)])
         .then(function(results) {
-            console.log(results);
             var pullNumbers = [];
+            let promises = [];
             for(let i = 0; i < results[0].length; i++) {
                 //this should create timestamp property from updated date
                 pullIssueObj[results[0][i]["number"]] = results[0][i];
                 pullIssueObj[results[0][i]["number"]]["type"] = "pull";
                 pullIssueObj[results[0][i]["number"]]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
-                getPullIssueComments(results[0][i]["comments_url"])
-                .then(function (result) {
-                    pullIssueObj[results[0][i]["number"]]["comments"] = result;
-                });
+                promises.push(getPullIssueComments(results[0][i]["comments_url"])
+                    .then(function (result) {
+                        pullIssueObj[results[0][i]["number"]]["comments"] = result;
+                    }));
                 pullNumbers.push(results[0][i]["number"]);
             }
             for(let i = 0; i < results[1].length; i++) {
@@ -226,14 +226,14 @@ var generatePullIssueObj = function(pullIssueObj={}){
                     pullIssueObj[results[1][i]["number"]] = results[1][i];
                     pullIssueObj[results[1][i]["number"]]["type"] = "issue";
                     pullIssueObj[results[1][i]["number"]]["ts"] = Date.parse(results[1][i]["updated_at"]) / 1000;
-                    getPullIssueComments(results[1][i]["comments_url"])
-                    .then(function (result) {
-                        pullIssueObj[results[1][i]["number"]]["comments"] = result;
-                    });
+                    promises.push(getPullIssueComments(results[1][i]["comments_url"])
+                        .then(function (result) {
+                            pullIssueObj[results[1][i]["number"]]["comments"] = result;
+                        }));
                 }
             }
+            return Promise.all(promises);
         }).then(function(){
-            console.log(pullIssueObj);
             return pullIssueObj;
         });
 };
@@ -264,7 +264,6 @@ let slack = function slack(method, options={},promiseCallback=function(data){ret
         payload["text"] = options["text"];
     }
     if (Number.isInteger(parseInt(options["time"]))){
-        console.log(parseFloat(options["time"]));
         payload["oldest"] = parseFloat(options["time"]);
     }
     if (method === "ListChannels"){
@@ -397,16 +396,12 @@ let refreshFunctions = function refreshFunctions(){
     let latestSlackMessage = 0;
     let refresh = function refresh(){
         return generatePullIssueObj(githubData).then(function(data){
-            console.log("refresh ran");
-            console.log(data);
             populatePullList();
             populateIssueList();
-            let messages = [];
             githubData = data;
-            messages.push(createGitHubList(githubData));
-            updateAllChannels(latestSlackMessage).then(function(slackMessages){
-                messages.push(slackMessages);
-                return (messages);
+            let gitHubMessages = createGitHubList(githubData);
+            return updateAllChannels(latestSlackMessage).then(function(slackMessages){
+                return (gitHubMessages.concat(slackMessages));
             });
         }).then(feedUpdate);
     };
@@ -501,7 +496,6 @@ let sortByTime = function sortByTime(messages){
 };
 let feedUpdate = function feedUpdate(messages){
     if (messages.length > 0){
-        console.log(messages);
         let feed = document.querySelector("#feed");
         sortByTime(messages);
         messages.forEach(function(messageObject){
@@ -517,13 +511,18 @@ let feedUpdate = function feedUpdate(messages){
             }
             if (messageObject["type"] === "pull"){
                 image.setAttribute("src","Git_Merge_Icon.png");
-                mainText.textContent = `User ${messageObject["author"]} title: `+
-                                        `${messageObject["title"]} \n`;
+                mainText.textContent = `User ${messageObject["user"]["login"]}`+
+                                        ` title: ${messageObject["title"]} \n`;
             }
             if (messageObject["type"] === "issue"){
                 image.setAttribute("src","Git_Issuse_Icon.png");
-                mainText.textContent = `User ${messageObject["author"]} title: `+
-                                        `${messageObject["title"]} \n`;
+                mainText.textContent = `User ${messageObject["user"]["login"]}`+
+                                        ` title: ${messageObject["title"]} \n`;
+            }
+            if (messageObject["type"] === "comment"){
+                image.setAttribute("src","Git_Comment_Icon.png");
+                mainText.textContent =  `User: ${messageObject["author"]} ` +
+                                    `Message: ${messageObject["message"]}\n`;
             }
             timestamp.textContent = `${convertUnixTime(messageObject["ts"])}`;
             timestamp.classList.add("timestamp");
