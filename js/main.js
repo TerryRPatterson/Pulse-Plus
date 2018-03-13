@@ -165,13 +165,15 @@ var getPullIssueComments = function(commentUrl) {
             return jsonArray;
         })
         .then(function(jsonArray) {
+            //console.log(jsonArray);
             for (var i = 0; i < jsonArray.length; i++) {
                 var tuple = {};
                 tuple["author"] = jsonArray[i].user.login;
                 tuple["message"] = jsonArray[i].body;
+                tuple["ts"] = Date.parse(jsonArray[i].updated_at) / 1000;
                 comments.push(tuple);
             }
-            //console.log(comments);
+            console.log(comments);
             return comments;
         });
 };
