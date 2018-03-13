@@ -27,3 +27,17 @@ feed_panel.addEventListener("click", () => {
     issues.add("hidden");
     pulls.add("hidden");
 });
+
+
+var closeX = document.querySelector(".close_modal");
+var lightbox = document.querySelector('.lightbox').classList;
+
+var modalToggle = () => {
+    console.log("click");
+    lightbox.toggle('modalhide');
+};
+
+closeX.addEventListener('click', modalToggle);
+
+
+
