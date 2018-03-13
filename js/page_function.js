@@ -45,6 +45,6 @@ window.onload = function () {
     objDiv.scrollTop = objDiv.scrollHeight;
 }
 
-var openModal = document.querySelector(".open_modal");
+var openModal = document.querySelector".open_modal");
 
 openModal.addEventListener('click', modalToggle);
