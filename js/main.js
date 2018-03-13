@@ -317,7 +317,7 @@ var makePullListItem = function(pullRequest) {
     $para.text(pullRequest.title);
     $titleCardDiv.append($span).append($para);
     $outerDiv.append($titleCardDiv).append($actionCardDiv);
-    $issueElement.append($outerDiv);
+    $pullElement.append($outerDiv);
     $pullList.append($pullElement);
 };
 
