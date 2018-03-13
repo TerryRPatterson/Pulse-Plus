@@ -222,8 +222,10 @@ let slack = function slack(method, options={},promiseCallback=function(data){ret
     if (options["text"]){
         payload["text"] = options["text"];
     }
-    if (Number.isInteger(options["time"])){
-        payload["oldest"] = options["time"];
+    console.log(options["time"]);
+    if (Number.isInteger(parseInt(options["time"]))){
+        console.log(parseFloat(options["time"]));
+        payload["oldest"] = parseFloat(options["time"]);
     }
     if (method === "ListChannels"){
         payload["types"] = "public_channel,private_channel";
@@ -328,53 +330,55 @@ populatePullList();
 
 let refreshFunctions = function refreshFunctions(){
     let updateData = function updateData(timestamp){
-        githubData = generatePullIssueObj(githubData);
-        let callback = function(data){
-            githubData = parseSlackData(data["messages"],githubData);
-            if (data["hasMore"]){
-                slack("ListMessages",{"channel":channel, "time":data["latest"]},
-                    callback).then(function(data){
-                    slackMessages = slackMessages.concat(data["messages"]
-                        .map(function(message){
-                            message["type"] = "slack";
-                            return message;
-                        })
-                    );
-                });
-            }
-        };
-        watchedChannels.forEach(function(channel){
-            slack("ListMessages",{"channel":channel, "time":timestamp},callback)
-                .then(function(data){
-                    if (latestSlackMessage < data["latest"]){
-                        latestSlackMessage = data["latest"];
-                    }
-                    slackMessages = slackMessages.concat(data["messages"]
-                        .map(function(message){
-                            message["type"] = "slack";
-                            console.log(message);
-                            return message;
-                        })
-                    );
-                });
+        return new Promise(function(resolve){
+            githubData = generatePullIssueObj(githubData);
+            let callback = function(data){
+                githubData = parseSlackData(data["messages"],githubData);
+                if (data["hasMore"]){
+                    let numberOfMessages = data["messages"].length - 1;
+                    let latest = data["messages"][numberOfMessages]["ts"];
+                    slack("ListMessages",{"channel":channel, "time":latest},
+                        callback).then(function(data){
+                        slackMessages = slackMessages.concat(data["messages"]
+                            .map(function(message){
+                                message["type"] = "slack";
+                                return message;
+                            })
+                        );
+                    });
+                }
+            };
+            watchedChannels.forEach(function(channel){
+                slack("ListMessages",{"channel":channel, "time":timestamp},callback)
+                    .then(function(data){
+                        sortByTime(data["messages"]);
+                        let numberOfMessages = data["messages"].length-1;
+                        let lastReceived = data["messages"][numberOfMessages]["ts"];
+                        console.log(data);
+                        if (latestSlackMessage < lastReceived){
+                            latestSlackMessage = lastReceived;
+                        }
+                        slackMessages = slackMessages.concat(data["messages"]
+                            .map(function(message){
+                                message["type"] = "slack";
+                                return message;
+                            })
+                        );
+                    });
+            });
+            resolve(slackMessages);
         });
     };
-    let latestSlackMessage;
+    let latestSlackMessage = 0;
     document.querySelector(".update_icon").addEventListener("click",function(event){
-        latestSlackMessage = updateData(latestSlackMessage);
-        feedUpdate(slackMessages);
+        updateData(latestSlackMessage).then(feedUpdate)
     });
     setInterval(function(){
-        latestSlackMessage = updateData(latestSlackMessage);
-        feedUpdate(slackMessages);
+        updateData(latestSlackMessage).then(feedUpdate);
     },5000);
-    latestSlackMessage = updateData(latestSlackMessage);
-    feedUpdate(slackMessages);
+    updateData(latestSlackMessage).then(feedUpdate);
 };
-let feedUpdate = function feedUpdate(messages){
-    let feed = document.querySelector("#feed");
-    feed.parentNode.replaceChild(feed.cloneNode(false),feed);
-    feed = document.querySelector("#feed");
+let sortByTime = function sortByTime(messages){
     messages.sort(function(a,b){
         if (a.ts < b.ts){
             return -1;
@@ -389,6 +393,12 @@ let feedUpdate = function feedUpdate(messages){
             throw new Error("A sorting error has occured");
         }
     });
+};
+let feedUpdate = function feedUpdate(messages){
+    let feed = document.querySelector("#feed");
+    feed.parentNode.replaceChild(feed.cloneNode(false),feed);
+    feed = document.querySelector("#feed");
+    sortByTime(messages);
     messages.forEach(function(messageObject){
         let container = document.createElement("li");
         let image = document.createElement("img");
