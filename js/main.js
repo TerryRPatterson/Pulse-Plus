@@ -1,7 +1,8 @@
 /* main.js */
 /*global $*/
 /* eslint no-console:0
-no-unused-vars:0 */
+no-unused-vars:0
+test */
 /* github functionality */
 const URL = "https://api.github.com/repos/TerryRPatterson/didactic-bassoon";
 const GITHUB_TOKEN = localStorage.getItem("GitToken");
