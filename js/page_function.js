@@ -40,4 +40,7 @@ var modalToggle = () => {
 closeX.addEventListener('click', modalToggle);
 
 
-
+window.onload = function () {
+    var objDiv = document.getElementById("feedContainer");
+    objDiv.scrollTop = objDiv.scrollHeight;
+}
