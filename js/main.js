@@ -184,7 +184,6 @@ var generatePullIssueObj = function(pullIssueObj={}){
                 pullIssueObj[results[0]["number"]] = results[0][i];
                 pullIssueObj[results[0]["number"]]["type"] = "pull";
                 pullIssueObj[results[0]["number"]]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
-
             }
             for(let i = 0; i < results[1].length; i++) {
             //this should create timestamp property from update date
