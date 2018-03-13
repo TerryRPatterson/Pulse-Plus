@@ -181,15 +181,15 @@ var generatePullIssueObj = function(pullIssueObj={}){
         .then(function(results) {
             for(let i = 0; i < results[0].length; i++) {
             //this should create timestamp property from updated date
-                results[0][i]["ts"] = results[0][i]["updated_at"] / 1000;
-                pullIssueObj[results[0][i]["number"]] = results[0][i];
-                pullIssueObj[results[0][i]["type"]] = "pull";
+             pullIssueObj[results[0][i]['number']] = results[0][i];
+             pullIssueObj[results[0][i]['number']]["type"] = "pull";
+             pullIssueObj[results[0][i]['number']]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
             }
             for(let i = 0; i < results[1].length; i++) {
             //this should create timestamp property from update date
-                results[1][i]["ts"] = results[1][i]["updated_at"] / 1000;
-                pullIssueObj[results[1][i]["number"]] = results[1][i];
-                pullIssueObj[results[1][i]["type"]] = "issue";
+                pullIssueObj[results[1][i]['number']] = results[1][i];
+                pullIssueObj[results[1][i]['number']]["type"] = "issue";
+                pullIssueObj[results[1][i]['number']]["ts"] = Date.parse(results[1][i]["updated_at"]) / 1000;
             }
         }).then(function(){
             return pullIssueObj;
@@ -221,7 +221,6 @@ let slack = function slack(method, options={},promiseCallback=function(data){ret
     if (options["text"]){
         payload["text"] = options["text"];
     }
-    console.log(options["time"]);
     if (Number.isInteger(parseInt(options["time"]))){
         console.log(parseFloat(options["time"]));
         payload["oldest"] = parseFloat(options["time"]);
@@ -277,9 +276,22 @@ let parseSlackData = function parseSlackData(slackData, githubData){
  */
 var makeIssueListItem = function(issue) {
     var $issueList = $("#issues ul");
-    var $issueElement = $("<li>").addClass("item card");
-    $issueElement.attr("id", issue.number);
-    $issueElement.text("Issue# " + issue.number + " " + issue.title);
+    var $issueElement = $("<li>");
+    var $outerDiv = $("<div>").addClass("card ghfeed blue-grey darken-1");
+    var $titleCardDiv = $("<div>").addClass("card-content white-text");
+    var $actionCardDiv = $("<div>").addClass("card-action");
+    var $span = $("<span>").addClass("card-title").text("Issue# " + issue.number);
+    var $para = $("<p>");
+    var $aHrefGithub = $("<a>");
+    var $aInspect = $("<a>");
+    $aInspect.attr("href", "#").text("Inspect");
+    $aHrefGithub.attr("href", issue.html_url).text("Open on GitHub");
+
+    $actionCardDiv.append($aHrefGithub).append($aInspect);
+    $para.text(issue.title);
+    $titleCardDiv.append($span).append($para);
+    $outerDiv.append($titleCardDiv).append($actionCardDiv);
+    $issueElement.append($outerDiv);
     $issueList.append($issueElement);
 };
 
@@ -288,11 +300,24 @@ var makeIssueListItem = function(issue) {
  * @param {object} pullRequest - An pull request object from GitHub.
  */
 var makePullListItem = function(pullRequest) {
-    var $issueList = $("#pulls ul");
-    var $issueElement = $("<li>").addClass("item card");
-    $issueElement.attr("id", pullRequest.number);
-    $issueElement.text("Pull Request# " + pullRequest.number + " " + pullRequest.title);
-    $issueList.append($issueElement);
+    var $pullList = $("#pulls ul");
+    var $pullElement = $("<li>");
+    var $outerDiv = $("<div>").addClass("card ghfeed indigo");
+    var $titleCardDiv = $("<div>").addClass("card-content white-text");
+    var $actionCardDiv = $("<div>").addClass("card-action");
+    var $span = $("<span>").addClass("card-title").text("Pull Request# " + pullRequest.number);
+    var $para = $("<p>");
+    var $aHrefGithub = $("<a>");
+    var $aInspect = $("<a>");
+    $aInspect.attr("href", "#").text("Inspect");
+    $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
+
+    $actionCardDiv.append($aHrefGithub).append($aInspect);
+    $para.text(pullRequest.title);
+    $titleCardDiv.append($span).append($para);
+    $outerDiv.append($titleCardDiv).append($actionCardDiv);
+    $pullElement.append($outerDiv);
+    $pullList.append($pullElement);
 };
 
 /**
@@ -389,9 +414,9 @@ let refreshFunctions = function refreshFunctions(){
             feedUpdate(data);
         });
     });
-    setInterval(function(){
-        updateAllChannels(latestSlackMessage).then(feedUpdate);
-    },5000);
+    //setInterval(function(){
+        //updateAllChannels(latestSlackMessage).then(feedUpdate);
+    //},5000);
     updateAllChannels(latestSlackMessage).then(feedUpdate);
 };
 let sortByTime = function sortByTime(messages){
@@ -412,8 +437,9 @@ let sortByTime = function sortByTime(messages){
 };
 let feedUpdate = function feedUpdate(messages){
     let feed = document.querySelector("#feed");
-    feed.parentNode.replaceChild(feed.cloneNode(false),feed);
-    feed = document.querySelector("#feed");
+    while(feed.lastChild){
+        feed.removeChild(feed.lastChild);
+    }
     sortByTime(messages);
     messages.forEach(function(messageObject){
         let container = document.createElement("li");

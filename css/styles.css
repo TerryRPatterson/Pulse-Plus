@@ -80,6 +80,61 @@ main {
     overflow: scroll;
 }
 
+/* add styling for spacer class */
+
+.lightbox {
+
+}
+
+.modal {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    /* overflow: auto; */
+    position: fixed;
+    top: 0;
+    width: 95vw;
+    z-index: 101;
+    background-color: rgba(0, 0, 0, .7);
+}
+
+.ghcomment {
+    float: right;
+    margin: 8px 0px 0px 10px; */
+}
+
+.ghopen, .ghcloseissue {
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.inputwrap {
+    overflow: hidden; 
+    padding-right: .5em;
+}
+
+.fa-times-circle {
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    color: black;
+    font-size: 1.75em;
+}
+
+.modalhide {
+    visibility:hidden;
+}
+
+.commentthread {
+    overflow: scroll;
+    width: 85%;
+    height: 150px;
+    display: block;
+    /* margin: 0 25px; */
+}
+
 .feed {
     grid-area: feed;
     overflow: scroll;
@@ -149,6 +204,12 @@ strong {
     z-index: 2;
     margin: 10px 0px 10px 20px;
     padding: 40px 0px 40px 0px;
+}
+
+@media (min-width: 336px) {
+    .fa-times-circle {
+        top: 10px;
+    }
 }
 
 @media (max-width: 574px) {
