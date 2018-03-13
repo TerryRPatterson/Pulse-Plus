@@ -206,27 +206,32 @@ var generatePullIssueObj = function(pullIssueObj={}){
     return Promise.all([listPullRequests(time), listIssues(time)])
         .then(function(results) {
             console.log(results);
+            var pullNumbers = [];
             for(let i = 0; i < results[0].length; i++) {
-            //this should create timestamp property from updated date
-                pullIssueObj[results[0]["number"]] = results[0][i];
-                pullIssueObj[results[0]["number"]]["type"] = "pull";
-                pullIssueObj[results[0]["number"]]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
+                //this should create timestamp property from updated date
+                pullIssueObj[results[0][i]["number"]] = results[0][i];
+                pullIssueObj[results[0][i]["number"]]["type"] = "pull";
+                pullIssueObj[results[0][i]["number"]]["ts"] = Date.parse(results[0][i]["updated_at"]) / 1000;
                 getPullIssueComments(results[0][i]["comments_url"])
                 .then(function (result) {
                     pullIssueObj[results[0][i]["number"]]["comments"] = result;
                 });
+                pullNumbers.push(results[0][i]["number"]);
             }
             for(let i = 0; i < results[1].length; i++) {
-            //this should create timestamp property from update date
-                pullIssueObj[results[1][i]["number"]] = results[1][i];
-                pullIssueObj[results[1][i]["number"]]["type"] = "issue";
-                pullIssueObj[results[1][i]["number"]]["ts"] = Date.parse(results[1][i]["updated_at"]) / 1000;
-                getPullIssueComments(results[1][i]["comments_url"])
-                .then(function (result) {
-                    pullIssueObj[results[1][i]["number"]]["comments"] = result;
-                });
+                //this should create timestamp property from update date
+                if (pullNumbers.includes(results[1][i]["number"]) != true) {
+                    pullIssueObj[results[1][i]["number"]] = results[1][i];
+                    pullIssueObj[results[1][i]["number"]]["type"] = "issue";
+                    pullIssueObj[results[1][i]["number"]]["ts"] = Date.parse(results[1][i]["updated_at"]) / 1000;
+                    getPullIssueComments(results[1][i]["comments_url"])
+                    .then(function (result) {
+                        pullIssueObj[results[1][i]["number"]]["comments"] = result;
+                    });
+                }
             }
         }).then(function(){
+            console.log(pullIssueObj);
             return pullIssueObj;
         });
 };
