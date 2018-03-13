@@ -354,7 +354,6 @@ let refreshFunctions = function refreshFunctions(){
                         sortByTime(data["messages"]);
                         let numberOfMessages = data["messages"].length-1;
                         let lastReceived = data["messages"][numberOfMessages]["ts"];
-                        console.log(data);
                         if (latestSlackMessage < lastReceived){
                             latestSlackMessage = lastReceived;
                         }
@@ -371,7 +370,7 @@ let refreshFunctions = function refreshFunctions(){
     };
     let latestSlackMessage = 0;
     document.querySelector(".update_icon").addEventListener("click",function(event){
-        updateData(latestSlackMessage).then(feedUpdate)
+        updateData(latestSlackMessage).then(feedUpdate);
     });
     setInterval(function(){
         updateData(latestSlackMessage).then(feedUpdate);
@@ -396,8 +395,9 @@ let sortByTime = function sortByTime(messages){
 };
 let feedUpdate = function feedUpdate(messages){
     let feed = document.querySelector("#feed");
-    feed.parentNode.replaceChild(feed.cloneNode(false),feed);
-    feed = document.querySelector("#feed");
+    while(feed.lastChild){
+        feed.removeChild(feed.lastChild);
+    }
     sortByTime(messages);
     messages.forEach(function(messageObject){
         let container = document.createElement("li");
