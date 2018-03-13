@@ -452,9 +452,6 @@ let sortByTime = function sortByTime(messages){
 let feedUpdate = function feedUpdate(messages){
     if (messages.length > 0){
         let feed = document.querySelector("#feed");
-        while(feed.lastChild){
-            feed.removeChild(feed.lastChild);
-        }
         sortByTime(messages);
         messages.forEach(function(messageObject){
             let container = document.createElement("li");
