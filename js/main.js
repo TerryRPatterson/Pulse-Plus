@@ -326,8 +326,8 @@ var makeIssueListItem = function(issue) {
     var $para = $("<p>");
     var $aHrefGithub = $("<a>");
     var $aInspect = $("<a>").addClass("open_modal");
-    let $GitForm = $("GitForm");
-    $aInspect.attr("href", "#").text("Inspect");
+    let $GitForm = $("#GitForm");
+    $aInspect.attr("href", "#").text("Inspect").on("click",modalToggle);
     $aHrefGithub.attr("href", issue.html_url).attr("target","_blank").text("Open on GitHub");
 
     $actionCardDiv.append($aHrefGithub).append($aInspect);
@@ -337,11 +337,11 @@ var makeIssueListItem = function(issue) {
     $issueElement.append($outerDiv);
     $issueList.append($issueElement);
 
-    $GitForm.on("submit",function(){
-        $.ajax(`${URL}/issues/comments/${number}`,{
-            "header":{authorization: "token " + GITHUB_TOKEN},
-            "method":"POST",
-            "data":$("gh_msg").val(),
+    $GitForm.submit(function(){
+        $.ajax(`${URL}/issues/${number}/comments`,{
+            headers:{authorization: "token " + GITHUB_TOKEN},
+            method:"POST",
+            data:JSON.stringify({body:$("#gh_msg").val()})
         }).then(function(){
             refresh().then(function(){$GitForm.reset();});
         });
