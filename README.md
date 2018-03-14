@@ -1,5 +1,7 @@
 # didactic-bassoon
 
+This application allows project managers and developers to interact across
+multiple platforms in one convenient location.
 
 ## API's Used
 * [GitHub API](https://developer.github.com/v3/)
