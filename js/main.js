@@ -316,6 +316,7 @@ let parseSlackData = function parseSlackData(slackData, githubData){
  * @param {object} issue - An issue object from GitHub.
  */
 var makeIssueListItem = function(issue) {
+    let number = issue.number;
     var $issueList = $("#issues ul");
     var $issueElement = $("<li>");
     var $outerDiv = $("<div>").addClass("card ghfeed blue-grey darken-1");
@@ -324,7 +325,7 @@ var makeIssueListItem = function(issue) {
     var $span = $("<span>").addClass("card-title").text("Issue# " + issue.number);
     var $para = $("<p>");
     var $aHrefGithub = $("<a>");
-    var $aInspect = $("<a>").addClass("open_modal");
+    var $aInspect = $("<a>").addClass("open_modal").on("click",modalToggle);
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", issue.html_url).attr("target","_blank").text("Open on GitHub");
 
@@ -341,6 +342,7 @@ var makeIssueListItem = function(issue) {
  * @param {object} pullRequest - An pull request object from GitHub.
  */
 var makePullListItem = function(pullRequest) {
+    let number = pullRequest.number;
     var $pullList = $("#pulls ul");
     var $pullElement = $("<li>");
     var $outerDiv = $("<div>").addClass("card ghfeed indigo");
@@ -349,7 +351,7 @@ var makePullListItem = function(pullRequest) {
     var $span = $("<span>").addClass("card-title").text("Pull Request# " + pullRequest.number);
     var $para = $("<p>");
     var $aHrefGithub = $("<a>");
-    var $aInspect = $("<a>").addClass("open_modal");
+    var $aInspect = $("<a>").addClass("open_modal").on("click",modalToggle);
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
     $aHrefGithub.attr("target","_blank");
