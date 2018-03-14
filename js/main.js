@@ -362,7 +362,7 @@ var makePullListItem = function(pullRequest) {
     var $span = $("<span>").addClass("card-title").text("Pull Request# " + pullRequest.number);
     var $para = $("<p>");
     var $aHrefGithub = $("<a>");
-    var $aInspect = $("<a>").addClass("open_modal");
+    var $aInspect = $("<a>").addClass("open_modal").on("click",modalToggle);
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
     $aHrefGithub.attr("target","_blank");
