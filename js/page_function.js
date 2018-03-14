@@ -44,7 +44,3 @@ window.onload = function () {
     var objDiv = document.getElementById("feedContainer");
     objDiv.scrollTop = objDiv.scrollHeight;
 }
-
-var openModal = document.querySelector(".open_modal");
-
-openModal.addEventListener('click', modalToggle);
