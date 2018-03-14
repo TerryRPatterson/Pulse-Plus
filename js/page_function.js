@@ -32,24 +32,17 @@ feed_panel.addEventListener("click", () => {
 
 
 var closeModal = document.querySelector(".close_modal");
-var lightbox = document.querySelector('.lightbox').classList;
 
-var modalToggle = () => {
-    console.log(lightbox);
-    if (!lightbox.contains("modalhide")){
-        $GitForm.off();
-    }
+let closeModalFunction = function closeModalFunction(){
+    var lightbox = document.querySelector('.lightbox').classList;
+    $GitForm.off();
     lightbox.toggle('modalhide');
 };
 
-closeModal.addEventListener('click', modalToggle);
+closeModal.addEventListener('click',closeModalFunction);
 
 
 window.onload = function () {
     var objDiv = document.getElementById("feedContainer");
     objDiv.scrollTop = objDiv.scrollHeight;
 };
-
-var openModal = document.querySelector(".open_modal");
-
-openModal.addEventListener('click', modalToggle);

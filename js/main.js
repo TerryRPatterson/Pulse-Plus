@@ -8,6 +8,7 @@ const GITHUB_TOKEN = localStorage.getItem("GitToken");
 
 let githubData = {};
 let watchedChannels = ["C9K0QKN3T","G9M6ERE94"];
+let refresh;//this is a function created later;
 /**
  * Function creates a Date object from an Unix time stamp. In order to
  * present human readable form of time.
@@ -309,6 +310,95 @@ let parseSlackData = function parseSlackData(slackData, githubData){
     });
     return githubData;
 };
+let modalToggleIssue = (event) => {
+    var lightbox = document.querySelector('.lightbox').classList;
+    console.log(lightbox);
+    if (lightbox.contains("modalhide")){
+        let title = document.getElementById("modal-title");
+        let number = event.target.getAttribute("id");
+        let comments = document.getElementById("commentthread");
+        let commentsString = "";
+        let messages = [];
+        let gitObject = githubData[number];
+        gitObject["comments"].forEach(function(message){
+            messages.push(message);
+        });
+        if (gitObject["slackMessages"] !== undefined){
+            gitObject["slackMessges"].forEach(function(message){
+                messages.push(message);
+            });
+        }
+        sortByTime(messages);
+        messages.forEach(function(message){
+            let li = document.createElement("li");
+            if (message["type"] === "slack"){
+                li.textContent = `${message["user"]}: ${message["text"]}`;
+            }
+            if (message["type"] === "comment"){
+                li.textContent = `${message["author"]}: ${message["message"]}`;
+            }
+            comments.appendChild(li);
+        });
+        gitObject[""];
+        title.textContent = `Issue #${number}`;
+        console.log(number);
+        $("#GitForm").submit(function(){$.ajax(`${URL}/issues/${number}/comments`,{
+            headers:{authorization: "token " + GITHUB_TOKEN},
+            method:"POST",
+            data:JSON.stringify({body:$("#gh_msg").val()})
+        }).then(function(){
+            refresh().then(function(){$("#GitForm").reset();});
+        });
+
+    });
+    }
+    lightbox.toggle('modalhide');
+};
+
+let modalTogglePull = (event) => {
+    var lightbox = document.querySelector('.lightbox').classList;
+    console.log(lightbox);
+    if (lightbox.contains("modalhide")){
+        let title = document.getElementById("modal-title");
+        let number = event.target.getAttribute("id");
+        let comments = document.getElementById("commentthread");
+        let gitObject = githubData[number];
+        let commentsString = "";
+        let messages = [];
+        gitObject["comments"].forEach(function(message){
+            messages.push(message);
+        });
+        if (gitObject["slackMessages"] !== undefined){
+            gitObject["slackMessages"].forEach(function(message){
+                messages.push(message);
+            });
+        }
+        sortByTime(messages);
+        messages.forEach(function(message){
+            let li = document.createElement("li");
+            if (message["type"] === "slack"){
+                li.textContent = `${message["user"]}: ${message["text"]}`;
+            }
+            if (message["type"] === "comment"){
+                li.textContent = `${message["author"]}: ${message["message"]}`;
+            }
+            comments.appendChild(li);
+        });
+        gitObject[""];
+        title.textContent = `Pull #${number}`;
+        console.log(number);
+        $("#GitForm").submit(function(){$.ajax(`${URL}/issues/${number}/comments`,{
+            headers:{authorization: "token " + GITHUB_TOKEN},
+            method:"POST",
+            data:JSON.stringify({body:$("#gh_msg").val()})
+        }).then(function(){
+            refresh().then(function(){$("#GitForm").reset();});
+        });
+
+    });
+    }
+    lightbox.toggle('modalhide');
+};
 // functions for populating list on page with issues ect
 
 /**
@@ -317,6 +407,7 @@ let parseSlackData = function parseSlackData(slackData, githubData){
  */
 var makeIssueListItem = function(issue) {
     let number = issue.number;
+
     var $issueList = $("#issues ul");
     var $issueElement = $("<li>");
     var $outerDiv = $("<div>").addClass("card ghfeed blue-grey darken-1");
@@ -325,9 +416,9 @@ var makeIssueListItem = function(issue) {
     var $span = $("<span>").addClass("card-title").text("Issue# " + issue.number);
     var $para = $("<p>");
     var $aHrefGithub = $("<a>");
-    var $aInspect = $("<a>").addClass("open_modal");
+    var $aInspect = $("<a>").addClass("open_modal").attr("id",number);
     let $GitForm = $("#GitForm");
-    $aInspect.attr("href", "#").text("Inspect").on("click",modalToggle);
+    $aInspect.attr("href", "#").text("Inspect").on("click",modalToggleIssue);
     $aHrefGithub.attr("href", issue.html_url).attr("target","_blank").text("Open on GitHub");
 
     $actionCardDiv.append($aHrefGithub).append($aInspect);
@@ -337,15 +428,7 @@ var makeIssueListItem = function(issue) {
     $issueElement.append($outerDiv);
     $issueList.append($issueElement);
 
-    $GitForm.submit(function(){
-        $.ajax(`${URL}/issues/${number}/comments`,{
-            headers:{authorization: "token " + GITHUB_TOKEN},
-            method:"POST",
-            data:JSON.stringify({body:$("#gh_msg").val()})
-        }).then(function(){
-            refresh().then(function(){$GitForm.reset();});
-        });
-    });
+    $GitForm.submit();
 };
 
 /**
@@ -354,6 +437,7 @@ var makeIssueListItem = function(issue) {
  */
 var makePullListItem = function(pullRequest) {
     let number = pullRequest.number;
+    let gitObject = githubData[number];
     var $pullList = $("#pulls ul");
     var $pullElement = $("<li>");
     var $outerDiv = $("<div>").addClass("card ghfeed indigo");
@@ -361,8 +445,9 @@ var makePullListItem = function(pullRequest) {
     var $actionCardDiv = $("<div>").addClass("card-action");
     var $span = $("<span>").addClass("card-title").text("Pull Request# " + pullRequest.number);
     var $para = $("<p>").addClass("card-desc");
-    var $aHrefGithub = $("<a>");
-    var $aInspect = $("<a>").addClass("open_modal").on("click",modalToggle);
+    var $aHrefGithub = $("<a>")
+    var $aInspect = $("<a>").addClass("open_modal").on("click",modalTogglePull)
+        .attr("id",number);;
     $aInspect.attr("href", "#").text("Inspect");
     $aHrefGithub.attr("href", pullRequest.html_url).text("Open on GitHub");
     $aHrefGithub.attr("target","_blank");
@@ -418,7 +503,7 @@ var populatePullList = function() {
 
 let refreshFunctions = function refreshFunctions(){
     let latestSlackMessage = 0;
-    let refresh = function refresh(){
+    refresh = function refresh(){
         return generatePullIssueObj(githubData).then(function(data){
             populatePullList();
             populateIssueList();
@@ -575,5 +660,4 @@ let createGitHubList = function createGitHubList(githubData){
     });
     return messages;
 };
-
 refreshFunctions();
