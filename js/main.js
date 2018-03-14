@@ -173,7 +173,7 @@ var getPullIssueComments = function(commentUrl) {
                 tuple["ts"] = Date.parse(jsonArray[i].updated_at) / 1000;
                 comments.push(tuple);
             }
-            console.log(comments);
+            //console.log(comments);
             return comments;
         });
 };
@@ -370,12 +370,22 @@ var makePullListItem = function(pullRequest) {
  */
 
 var populateIssueList = function() {
-    // grab all issues
-    listIssues().then(function(results) {
-        for(var i = 0; i < results.length; i++) {
-            //console.log(results[i]);
-            makeIssueListItem(results[i]);
+    $("#issues ul").empty();
+    var pullArray = [];
+    listPullRequests()
+    .then(function (results) {
+        for (var i = 0; i < results.length; i++) {
+            pullArray.push(results[i].number);
         }
+        // grab all issues
+        listIssues().then(function(results) {
+            for(var i = 0; i < results.length; i++) {
+            //console.log(results[i]);
+                if (pullArray.includes(results[i]["number"]) != true) {
+                    makeIssueListItem(results[i]);
+                }
+            }
+        });
     });
 };
 
@@ -384,6 +394,7 @@ var populateIssueList = function() {
  * the page.
  */
 var populatePullList = function() {
+    $("#pulls ul").empty();
     // grab all issues
     listPullRequests().then(function(results) {
         for(var i = 0; i < results.length; i++) {
