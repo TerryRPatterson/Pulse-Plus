@@ -392,6 +392,10 @@ let modalTogglePull = (event) => {
             method:"POST",
             data:JSON.stringify({body:$("#gh_msg").val()})
         }).then(function(){
+            let comments = document.getElementById("commentthread");
+            let li = document.createElement("li");
+            li.textContent = `You: ${$("#gh_msg").val()}`;
+            comments.appendChild(li);
             refresh().then(function(){$("#GitForm").reset();});
         });
 
