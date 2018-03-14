@@ -349,7 +349,7 @@ var makePullListItem = function(pullRequest) {
     var $titleCardDiv = $("<div>").addClass("card-content white-text");
     var $actionCardDiv = $("<div>").addClass("card-action");
     var $span = $("<span>").addClass("card-title").text("Pull Request# " + pullRequest.number);
-    var $para = $("<p>");
+    var $para = $("<p>").addClass("card-desc");
     var $aHrefGithub = $("<a>");
     var $aInspect = $("<a>").addClass("open_modal").on("click",modalToggle);
     $aInspect.attr("href", "#").text("Inspect");
