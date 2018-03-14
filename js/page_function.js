@@ -7,6 +7,8 @@ var pulls = document.querySelector(".pulls").classList;
 var feed = document.querySelector(".feed").classList;
 var messaging = document.querySelector(".messaging").classList;
 
+let $GitForm = $("#GitForm");
+
 issues_panel.addEventListener("click", () => {
     issues.remove("hidden");
     pulls.add("hidden");
@@ -33,7 +35,10 @@ var closeModal = document.querySelector(".close_modal");
 var lightbox = document.querySelector('.lightbox').classList;
 
 var modalToggle = () => {
-    console.log("click");
+    console.log(lightbox);
+    if (!lightbox.contains("modalhide")){
+        $GitForm.off();
+    }
     lightbox.toggle('modalhide');
 };
 
@@ -43,4 +48,8 @@ closeModal.addEventListener('click', modalToggle);
 window.onload = function () {
     var objDiv = document.getElementById("feedContainer");
     objDiv.scrollTop = objDiv.scrollHeight;
-}
+};
+
+var openModal = document.querySelector(".open_modal");
+
+openModal.addEventListener('click', modalToggle);
