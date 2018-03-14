@@ -313,10 +313,12 @@ let parseSlackData = function parseSlackData(slackData, githubData){
 let modalToggleIssue = (event) => {
     var lightbox = document.querySelector('.lightbox').classList;
     console.log(lightbox);
-    if (lightbox.contains("modalhide")){
         let title = document.getElementById("modal-title");
         let number = event.target.getAttribute("id");
         let comments = document.getElementById("commentthread");
+        while (comments.lastChild){
+            comments.removeChild(comments.lastChild)
+        }
         let commentsString = "";
         let messages = [];
         let gitObject = githubData[number];
@@ -351,17 +353,18 @@ let modalToggleIssue = (event) => {
         });
 
     });
-    }
     lightbox.toggle('modalhide');
 };
 
 let modalTogglePull = (event) => {
     var lightbox = document.querySelector('.lightbox').classList;
     console.log(lightbox);
-    if (lightbox.contains("modalhide")){
         let title = document.getElementById("modal-title");
         let number = event.target.getAttribute("id");
         let comments = document.getElementById("commentthread");
+        while (comments.lastChild){
+            comments.removeChild(comments.lastChild)
+        }
         let gitObject = githubData[number];
         let commentsString = "";
         let messages = [];
@@ -400,7 +403,6 @@ let modalTogglePull = (event) => {
         });
 
     });
-    }
     lightbox.toggle('modalhide');
 };
 // functions for populating list on page with issues ect
