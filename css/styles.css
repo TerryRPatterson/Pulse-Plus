@@ -59,7 +59,7 @@ li > span {
 
 main {
     display: grid;
-    grid-template-columns: 1fr ;
+    grid-template-columns: 1fr;
     grid-template-areas: "issues"
                          "pulls"
                          "feed";
@@ -96,7 +96,7 @@ main {
 
 .ghcomment {
     float: right;
-    margin: 8px 0px 0px 10px; */
+    margin: 8px 0px 0px 10px;
 }
 
 .ghopen, .ghcloseissue {
