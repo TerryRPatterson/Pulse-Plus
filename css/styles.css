@@ -63,6 +63,7 @@ main {
     grid-template-areas: "issues"
                          "pulls"
                          "feed";
+    grid-row-gap: 15px;
     padding-top: 120px;
 }
 
@@ -80,19 +81,12 @@ main {
     overflow: scroll;
 }
 
-/* add styling for spacer class */
-
-/* .lightbox {
-
-} */
-
 .modal {
     align-items: center;
     display: flex;
     height: 100%;
     justify-content: center;
     left: 0;
-    /* overflow: auto; */
     position: fixed;
     top: 0;
     width: 95%;
@@ -152,17 +146,7 @@ main {
     text-align: center;
 }
 
-.item {  /* can be removed after card update */
-    color: white;
-    background-color: #19A79A;
-    width:95%;
-    text-align: center;
-    padding: 20px;
-}
-
 .feedList {
-    /* display: grid; */
-    /* grid-template-columns: repeat(1, auto); */
     grid-row: span 3;
     background-color: #f5f5f5;
 }
@@ -197,15 +181,6 @@ button > span {
     font-style: none;
     width: 100vw;
 }
-
-/* strong {
-    display: fixed;
-    position: sticky;
-    font-size: 1.5em;
-    z-index: 2;
-    margin: 10px 0px 10px 20px;
-    padding: 40px 0px 40px 0px;
-} */
 
 @media (min-width: 336px) {
     .fa-times-circle {
@@ -274,8 +249,6 @@ button > span {
         grid-area: feed;
         height:250px;
         width: 95vw;
-        max-width: 1172px;
-        /* height: calc(50vh-64px); */
         overflow: scroll;
         margin: 0 auto;
     }
