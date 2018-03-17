@@ -63,6 +63,7 @@ main {
     grid-template-areas: "issues"
                          "pulls"
                          "feed";
+    grid-row-gap: 10px;
     padding-top: 120px;
 }
 
@@ -274,7 +275,7 @@ button > span {
         grid-area: feed;
         height:250px;
         width: 95vw;
-        max-width: 1172px;
+        /* max-width: 1172px; */
         /* height: calc(50vh-64px); */
         overflow: scroll;
         margin: 0 auto;
