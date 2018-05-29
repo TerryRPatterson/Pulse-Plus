@@ -19,12 +19,53 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.0/normalize.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <title>Pulse Plus</title>
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
+    <header class="siteHeader">
+        <nav class="topnav">
+            <ul>
+                <li><i class="fab fa-github"></i> PulsePlus</li>
+            </ul>
+        </nav>
+        <nav class="bottomnav">
+            <ul>
+                <li class="logo"><i class="fab fa-github"></i> Pulse<span>Plus</span></li>
+                <li>
+                    <a href="#issues" class="issues_icon">
+                        <i class="large material-icons">priority_high</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#pulls" class="pulls_icon">
+                        <i class="fas fa-code-branch"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#slack" class="feed_icon">
+                        <i class="large material-icons">chat</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#!" class="update_icon">
+                        <i class="large material-icons">sync</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#!" class="settings_icon">
+                        <i class="large material-icons">settings</i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
     <div id="root"></div>
     <!--
       This HTML file is a template.
